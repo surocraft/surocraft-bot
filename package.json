@@ -1,35 +1,17 @@
 {
-  "name": "minecraft-bot",
+  "name": "surocraft-bot",
   "version": "1.4.0",
-  "description": "Discord minecraft bot, with which you can check your minecraft server status (online players, version, online status etc.)",
+  "description": "Discord minecraft bot for SuroCraft",
   "main": "index.js",
   "scripts": {
-    "test": "node dev-index.js",
-    "dev": "node dev-index.js",
     "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PetyXbron/minecraft-bot.git"
-  },
-  "keywords": [
-    "petyxbron",
-    "discord",
-    "discord bot",
-    "chat bot",
-    "minecraft server",
-    "minecraft",
-    "bot"
-  ],
   "author": "PetyXbron",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PetyXbron/minecraft-bot/issues"
-  },
-  "homepage": "https://github.com/PetyXbron/minecraft-bot#readme",
   "dependencies": {
     "chalk": "^4.1.2",
+    "discord-timestamp": "^1.0.2",
     "discord.js": "^13.3.1",
+    "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "math": "^0.0.3",
     "minecraft-motd-util": "^1.1.6",

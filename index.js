@@ -2,7 +2,8 @@ const Discord = require('discord.js'),
 fs = require('fs'),
 c = require('chalk'),
 ms = require('ms'),
-Intents = Discord.Intents
+Intents = Discord.Intents,
+web = require('./server')
 
 //Discord client - I like "bot" more, then "client"
 const bot = new Discord.Client({ intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_MESSAGE_TYPING, Intents.FLAGS.GUILD_MEMBERS ] });
@@ -197,5 +198,6 @@ fs.readdir("./commands/", (err, files) => {
     });
 });
 
+web();
 //Bot login
 bot.login(bot.token);

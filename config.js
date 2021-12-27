@@ -1,22 +1,24 @@
+const token = process.env['discordBotToken']
+
 //CONFIG DATA EXPLANATION - https://docs.petyxbron.cz/config/config-info
 module.exports = {
     //Your bot data
     bot: {
-        token: '', //Your bot token - https://tinyurl.com/discordbot-token
-        prefix: '', //Your custom prefix of the bot, like "!" or "."
-        status: '', //Custom activity/status text
-        activity: '' //You can choose: PLAYING, LISTENING, WATCHING, COMPETING
+        token: token, //Your bot token - https://tinyurl.com/discordbot-token
+        prefix: '-', //Your custom prefix of the bot, like "!" or "."
+        status: '{onlinePlayers} online', //Custom activity/status text
+        activity: 'WATCHING' //You can choose: PLAYING, LISTENING, WATCHING, COMPETING
     },
 
     //Your minecraft server data
     server: {
-        name: '', //Your server name
-        type: '', //"java" or "bedrock"
-        ip: '', //IP of your server - do not include port - e.g. "mc.hypixel.net"
+        name: 'SuroCraft', //Your server name
+        type: 'java', //"java" or "bedrock"
+        ip: 'mc.surocraft.eu', //IP of your server - do not include port - e.g. "mc.hypixel.net"
         port: '', //PORT of your server - empty => default port (BE 19132, JA 25565)
-        icon: '', //Link to icon - like "https://website.com/icon.png"
-        version: '', //Minecraft version of sever
-        vote: '' //Vote link - like "https://minecraftpocket-servers.com/server/80103/vote/"
+        icon: 'https://i.imgur.com/0T74i5U.png', //Link to icon - like "https://website.com/icon.png"
+        version: '1.18.', //Minecraft version of sever
+        vote: 'https://minecraftpocket-servers.com/server/113005/vote' //Vote link - like "https://minecraftpocket-servers.com/server/80103/vote/"
     },
 
     //Basic code settings
@@ -24,17 +26,17 @@ module.exports = {
     settings: {
         warns: true, //Show warns?
         debug: false, //Log most of changes and updates (pretty spam)?
-        inviteLink: true, //Show bot invite link on bot start?
+        inviteLink: false, //Show bot invite link on bot start?
         readyScan: true, //On bot's start, send to console server's basic info?
-        split: false, //Advanced - Extract only the version like "1.17" or "1.12" etc.
+        split: true, //Advanced - Extract only the version like "1.17" or "1.12" etc.
         randomColor: false, //Enable random hex color generator for embeds? Overwrites embeds settings!
-        statusCH: false, //Enable auto-changing status message
-        votingCH: false //Enable voting channel
+        statusCH: true, //Enable auto-changing status message
+        votingCH: true //Enable voting channel
     },
     
     //Period of auto changing status if you are using {onlinePlayers} or {maxPlayers} in bot's status
     autoStatus: {
-        time: '10min'
+        time: '30s'
     },
     
     //Voting channel - https://docs.petyxbron.cz/config/config-info#voting-ch
@@ -46,10 +48,10 @@ module.exports = {
             cancel: '❌' //Third added reaction (cancel/remove button)
         },
         guild: {
-            id: ''
+            id: '812280438490923048'
         },
         channel: {
-            id: ''
+            id: '862805837465780225'
         }
     },
 
@@ -57,29 +59,28 @@ module.exports = {
     statusCH: {
         time: '30s', //How long should the status always be updated? - like "3min", "20s" or "1min" etc.
         guild: {
-            id: '',
+            id: '812280438490923048',
         },
         channel: {
-            id: '',
+            id: '862039798267904030',
         }
     },
 
     //Embeds settings
     embeds: {
         colors: {
-            normal: '',  //Main/succesful color of embeds - choose HEX color here: https://htmlcolorcodes.com
+            normal: '#87335a',  //Main/succesful color of embeds - choose HEX color here: https://htmlcolorcodes.com
             error: '', //Error/unsuccesful color of embeds - choose HEX color here: https://htmlcolorcodes.com
         }
     },
 
-    //Custom text settings
     messages: {
         ip: {
-            title: "IP address:",
-            description: "\`{serverIp}\`:\`{serverPort}\`"
+            title: "{serverName} IP:",
+            description: "**JAVA** \`{serverIp}\`:\`{serverPort}\`\n**BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`"
         },
         list: {
-            title: "Online player list:",
+            title: "{serverName} list:",
             description: "**{playersOnline}**/**{playersMax}**",
             listFormat: "```{playersList}```"
         },
@@ -101,15 +102,15 @@ module.exports = {
             **{playersOnline}**/**{playersMax}**`,
         },
         test: {
-            content: "Test message reply."
+            content: "Zdravím!"
         },
         version: {
-            title: "Minecraft version:",
+            title: "{serverName} verze:",
             description: "{serverType} {serverVersion}"
         },
         vote: {
-            title: "Server list vote link:",
-            description: "[Here]({voteLink}) you can vote for {serverName}."
+            title: "{serverName} HLASOVÁNÍ:",
+            description: "[Zde]({voteLink}) můžeš hlasovat pro {serverName}."
         }
     },
 
@@ -148,5 +149,4 @@ module.exports = {
         ]
     }
 };
-
 //CONFIG DATA EXPLANATION - https://docs.petyxbron.cz/config/config-info
