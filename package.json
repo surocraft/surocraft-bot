@@ -1,12 +1,16 @@
 {
   "name": "surocraft-bot",
-  "version": "1.4.0",
+  "version": "2.0.8",
   "description": "Discord minecraft bot for SuroCraft",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "author": "PetyXbron",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surocraft/surocraft-bot.git"
+  },
   "dependencies": {
     "chalk": "^4.1.2",
     "discord-timestamp": "^1.0.2",

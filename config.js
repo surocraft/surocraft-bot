@@ -89,16 +89,14 @@ module.exports = {
             description:
             `:white_check_mark: **ONLINE**
             
-            **Description**
-            {motd}
+            **IP Adresa**
+            **JAVA** \`mc.surocraft.eu\`:\`25565\`
+            **BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`
             
-            **IP Address**
-            \`{serverIp}\`:\`{serverPort}\`
+            **Verze**
+            {serverVersion}
             
-            **Version**
-            {serverType} {serverVersion}
-            
-            **Players**
+            **Hráči**
             **{playersOnline}**/**{playersMax}**`,
         },
         test: {
@@ -106,7 +104,7 @@ module.exports = {
         },
         version: {
             title: "{serverName} verze:",
-            description: "{serverType} {serverVersion}"
+            description: "Java {serverVersion}\nBedrock {serverVersion}"
         },
         vote: {
             title: "{serverName} HLASOVÁNÍ:",
