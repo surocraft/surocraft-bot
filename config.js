@@ -104,7 +104,7 @@ module.exports = {
         },
         version: {
             title: "{serverName} verze:",
-            description: "Java {serverVersion}\nBedrock {serverVersion}"
+            description: "Java {serverVersion}\nBedrock 1.8.*"
         },
         vote: {
             title: "{serverName} HLASOVÁNÍ:",
