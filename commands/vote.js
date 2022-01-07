@@ -1,6 +1,5 @@
 const { commands } = require("../config");
 const Discord = require('discord.js');
-const { Server } = require("http");
 
 module.exports.config = {
     name: "vote", //Name of command - RENAME THE FILE TOO!!!
