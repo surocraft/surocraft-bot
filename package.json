@@ -1,6 +1,6 @@
 {
   "name": "surocraft-bot",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Discord minecraft bot for SuroCraft",
   "main": "index.js",
   "scripts": {
