@@ -202,7 +202,7 @@ const schedule = require('node-schedule');
 
 const votePingRule = new schedule.RecurrenceRule();
 votePingRule.hour = 17;
-votePingRule.minute = 08;
+votePingRule.minute = 00;
 votePingRule.tz = 'Europe/Prague';
 
 const votePing = schedule.scheduleJob(votePingRule, function() {
