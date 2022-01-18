@@ -198,6 +198,18 @@ fs.readdir("./commands/", (err, files) => {
     });
 });
 
+const schedule = require('node-schedule');
+
+schedule.scheduleJob('0 17 * * *', () => {
+  const votePingChannel = bot.channels.cache.get('921803832667832380')
+  const votePingEmbed = new Discord.MessageEmbed()
+    .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
+    .setTitle("Je čas hlasovat!")
+    .setDescription("*Právě je 17:00*\nHlasovat můžeš __**[zde](https://minecraftpocket-servers.com/server/113005/vote)**__.\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__!\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__.")
+    .setColor(config.embeds.color);
+  votePingChannel.send({ content: `<@&932655587861364776>`, embeds: [votePingEmbed] })
+});
+
 web();
 //Bot login
 bot.login(bot.token);
