@@ -1,6 +1,6 @@
 {
   "name": "surocraft-bot",
-  "version": "2.1.9",
+  "version": "2.2.0",
   "description": "Discord minecraft bot for SuroCraft",
   "main": "index.js",
   "scripts": {
@@ -13,14 +13,17 @@
     "url": "git+https://github.com/surocraft/surocraft-bot.git"
   },
   "dependencies": {
+    "@discordjs/builders": "^0.12.0",
+    "@discordjs/rest": "^0.3.0",
     "chalk": "^4.1.2",
+    "discord-api-types": "^0.26.1",
     "discord-timestamp": "^1.0.2",
     "discord.js": "^13.3.1",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "math": "^0.0.3",
     "minecraft-motd-util": "^1.1.6",
-    "minecraft-server-util": "^5.1.2",
+    "minecraft-server-util": "^5.2.9",
     "ms": "^2.1.3",
     "node-schedule": "^2.1.0",
     "quick.db": "^7.1.3"

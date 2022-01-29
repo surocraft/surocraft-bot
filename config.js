@@ -33,12 +33,12 @@ module.exports = {
         statusCH: true, //Enable auto-changing status message
         votingCH: true //Enable voting channel
     },
-    
+
     //Period of auto changing status if you are using {onlinePlayers} or {maxPlayers} in bot's status
     autoStatus: {
         time: '30s'
     },
-    
+
     //Voting channel - https://docs.petyxbron.cz/config/config-info#voting-ch
     votingCH: {
         time: '30s', //Time for how long the cancel reaction should be deleted.

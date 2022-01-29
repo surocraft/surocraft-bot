@@ -1,4 +1,3 @@
-const { commands } = require("../config");
 const Discord = require('discord.js');
 const Timestamp = require('discord-timestamp')
 
