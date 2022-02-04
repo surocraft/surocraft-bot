@@ -8,14 +8,14 @@ module.exports.config = {
 };
 
 module.exports.run = async (bot, message, args) => {
-    const { server, config, text } = bot
-    let icon = server.icon ? server.icon : message.guild.icon
-    let serverName = config.server.name ? config.server.name : message.guild.name
+    const { server, config, text } = bot;
+    let icon = server.icon ? server.icon : message.guild.icon;
+    let serverName = config.server.name ? config.server.name : message.guild.name;
 
-        const dynmapEmbed = new Discord.MessageEmbed()
-            .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-            .setTitle("Mapa světa")
-            .setDescription("SuroCraft DynMap světa najdeš na **__[map.surocraft.eu](https://map.surocraft.eu/)__**")
-            .setColor(config.embeds.color);
-        message.channel.send({ embeds: [dynmapEmbed] })
+    const dynmapEmbed = new Discord.MessageEmbed()
+        .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+        .setTitle("Mapa světa")
+        .setDescription("SuroCraft DynMap světa najdeš na **__[map.surocraft.eu](https://map.surocraft.eu/)__**")
+        .setColor(config.embeds.color);
+    message.channel.send({ embeds: [dynmapEmbed] });
 };

@@ -8,14 +8,14 @@ module.exports.config = {
 };
 
 module.exports.run = async (bot, message, args) => {
-    const { server, config, text } = bot
-    let icon = server.icon ? server.icon : message.guild.icon
-    let serverName = config.server.name ? config.server.name : message.guild.name
+    const { server, config, text } = bot;
+    let icon = server.icon ? server.icon : message.guild.icon;
+    let serverName = config.server.name ? config.server.name : message.guild.name;
 
-        const wikiEmbed = new Discord.MessageEmbed()
-            .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-            .setTitle("SuroCraft WiKi")
-            .setDescription("Dokumentaci, tutoriály, návody serveu najdeš na **__[wiki.surocraft.eu](https://wiki.surocraft.eu/)__**")
-            .setColor(config.embeds.color);
-        message.channel.send({ embeds: [wikiEmbed] })
+    const wikiEmbed = new Discord.MessageEmbed()
+        .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+        .setTitle("SuroCraft WiKi")
+        .setDescription("Dokumentaci, tutoriály, návody serveu najdeš na **__[wiki.surocraft.eu](https://wiki.surocraft.eu/)__**")
+        .setColor(config.embeds.color);
+    message.channel.send({ embeds: [wikiEmbed] });
 };
