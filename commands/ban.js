@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Timestamp = require('discord-timestamp');
+const ms = require('ms');
 
 module.exports.config = {
   name: "ban", //Name of command - RENAME THE FILE TOO!!!
@@ -18,31 +19,34 @@ module.exports.run = async (bot, message, args) => {
     return message.reply({ content: `**Nejsi STAFF pro použití tohoto příkazu.**` });
   }
 
+  let player;
   if (!args[0]) {
-    message.reply({ content: `**Napiš jméno hráče!**\nPoužij: \`${bot.prefix}ban (hráč) (důvod)\`` });
+    message.reply({ content: `**Napiš jméno hráče!**\nPoužij: \`${bot.prefix}ban <hráč> <doba> <důvod>\`` });
     return;
-  }
-
-  if (args[1] === "n") {
-    var time = "neurčito";
   } else {
-    var time = args[1];
+    player = args[0];
   }
 
+  let time,
+    dateNowMs = Date.now();
+  if (args[1] === "n" || args[1] === "0") {
+    time = undefined;
+  } else {
+    timeMs = ms(args[1]);
+    time = dateNowMs + timeMs;
+  }
+
+  let reason;
   if (!args.slice(2).join(" ")) {
-    message.reply({ content: `**Napiš důvod banu!**\nPoužij: \`${bot.prefix}ban (hráč) (důvod)\`` });
+    message.reply({ content: `**Napiš důvod banu!**\nPoužij: \`${bot.prefix}ban <hráč> <doba> <důvod>\`` });
     return;
+  } else {
+    reason = args.slice(2).join(" ");
   }
 
   const banEmbed = new Discord.MessageEmbed()
-    .setTitle('BAN: ' + args[0])
-    .setDescription(`
-    **User:** **__${args[0]}__**
-    **Banned:** <t:${Timestamp(Date.now())}:f>
-    **From:**      <@${message.author.id}>
-    **Expires:**  \`${time}\`
-    **Reason:** ${args.slice(2).join(" ")}
-  `)
+    .setTitle(player + " byl zabanován")
+    .setDescription(`**Hráč:**⠀⠀**__\`${player}\`__**\n**Datum:**⠀<t:${Timestamp(Date.now())}:f>\n**Staff:**⠀⠀<@${message.author.id}>\n**Vyprší:**⠀${time ? `<t:${Timestamp(time)}:R>` : "`Nikdy`"}\n**Důvod:**⠀\`${reason}\``)
     .setColor(config.embeds.color);
   kanál.send({ content: "<@&921813279431614465> 🔔", embeds: [banEmbed] });
 
