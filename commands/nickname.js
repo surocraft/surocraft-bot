@@ -9,7 +9,7 @@ module.exports.config = {
 
 module.exports.run = async (bot, message, args) => {
   const { server, config } = bot;
-  icon = server.icon ? server.icon : message.guild.icon;
+  icon = server.icon ? server.icon : message.guild.iconURL();
 
   if (!message.member.roles.cache.find(r => r.id === "819306403041640459")) {
     return message.reply({ content: `**Nejsi STAFF pro použití tohoto příkazu.**` });
