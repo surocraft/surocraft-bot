@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
   const votePingEmbedNoMention = new MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00*\n**Hlasovat můžeš na:**\nHlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\nDruhé stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00*\n**Hlasovat můžeš na:**\nHlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\nDruhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
   const msg2 = await message.channel.send({ content: "*Náhled notifikace:*"})
@@ -51,7 +51,7 @@ module.exports.run = async (bot, message, args) => {
       const votePingEmbed = new MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00*\n**Hlasovat můžeš na:**\nHlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\nDruhé stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00*\n**Hlasovat můžeš na:**\nHlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\nDruhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
       votePingChannel.send({ content: `<@&932655587861364776>\nhttps://bit.ly/surocraft-vote`, embeds: [votePingEmbed] });
