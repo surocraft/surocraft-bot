@@ -234,19 +234,19 @@ bot.once('ready', async (bot) => {
 const schedule = require('node-schedule');
 
 const votePingRule = new schedule.RecurrenceRule();
-votePingRule.hour = 17;
-votePingRule.minute = 00;
-votePingRule.tz = 'Europe/Prague';
+    votePingRule.hour = 17;
+    votePingRule.minute = 00;
+    votePingRule.tz = 'Europe/Prague';
 
 schedule.scheduleJob(votePingRule, function () {
     const votePingChannel = bot.channels.cache.get('921803832667832380');
     const votePingEmbed = new Discord.MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00*\n**Hlasovat můžeš na:**\nHlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\nDruhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
-    votePingChannel.send({ content: `<@&932655587861364776>\nhttps://bit.ly/surocraft-vote`, embeds: [votePingEmbed] });
+    votePingChannel.send({ content: `<@&932655587861364776>\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>`, embeds: [votePingEmbed] });
 });
 
 web();

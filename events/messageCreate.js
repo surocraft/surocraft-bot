@@ -4,13 +4,6 @@ const version = require('../package.json').version;
 module.exports = async (bot, message) => {
     if (message.channel.type.toLocaleUpperCase() === 'DM') return;
     if (message.author.bot || message.author.system) return;
-    if (message.content.includes(`minecraft-bot version`)) {
-        message.channel.sendTyping();
-        setTimeout(function () {
-            message.channel.send({ content: version });
-        }, ms('1s'));
-        return;
-    }
 
     const { prefix, server, config } = bot;
 
