@@ -3,7 +3,7 @@ const ms = require('ms');
 const { MessageActionRow, MessageButton, MessageEmbed } = Discord;
 
 module.exports.config = {
-  name: "pushVote", //Name of command - RENAME THE FILE TOO!!!
+  name: "pushvote", //Name of command - RENAME THE FILE TOO!!!
   description: "Manually pushes vote notification alert", //Description of command - you can change it :)
   aliases: ['pvote', 'tovote', 'votepush', 'nvote'], //Command's aliases - set them in config.js
   enable: true //Enable this command? - true or false (boolean)
@@ -26,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
     );
 
 
-  const msg1 = await message.reply({ content: `Jsi si jistý, že chceš odeslat notifikaci k hlasování do <#921803832667832380> a zmínit roli?`, components: [row] });
+  const msg1 = await message.reply({ content: `> **Jsi si jistý, že chceš odeslat notifikaci k hlasování do <#921803832667832380> a zmínit roli?**\nMáš 30 vteřin na odpověď.`, components: [row] });
 
   const votePingEmbedNoMention = new MessageEmbed()
     .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
@@ -47,6 +47,7 @@ module.exports.run = async (bot, message, args) => {
     if (i.customId === 'pushVote') {
       msg2.delete();
       msg3.delete();
+
       const votePingChannel = bot.channels.cache.get('921803832667832380');
       const votePingEmbed = new MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
@@ -54,9 +55,9 @@ module.exports.run = async (bot, message, args) => {
         .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
-      votePingChannel.send({ content: `<@&932655587861364776>\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>`, embeds: [votePingEmbed] });
+      const notifikace = await votePingChannel.send({ content: `<@&932655587861364776>\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>`, embeds: [votePingEmbed] });
 
-      await msg1.edit({ content: `Notifikace odeslána!`, components: [] });
+      await msg1.edit({ content: `> **Notifikace byla úspěšně odeslána!**\n**Kanál:** <#${notifikace.channelId}>\n**Zpráva:** ${notifikace.url}`, components: [] });
     }
   });
 
@@ -72,21 +73,23 @@ module.exports.run = async (bot, message, args) => {
           .setEmoji('✉️')
           .setDisabled(true),
       );
-    await msg1.edit({ content: `Čas vypršel.\nNotifikace nebyla odeslána!`, components: [newRow] });
+    await msg1.edit({ content: `> **Čas vypršel.**\nNotifikace nebyla odeslána!`, components: [newRow] });
   });
 
-  collector.on('end', async () => {
-    msg2.delete();
-    msg3.delete();
-    const newRow = new MessageActionRow()
-      .addComponents(
-        new MessageButton()
-          .setCustomId('pushVote')
-          .setLabel('Odeslat')
-          .setStyle('DANGER')
-          .setEmoji('✉️')
-          .setDisabled(true),
-      );
-    await msg1.edit({ content: `Čas vypršel.\nNotifikace nebyla odeslána!`, components: [newRow] });
+  collector.on('end', async collected => {
+    if (collected.size === 0) {
+      msg2.delete();
+      msg3.delete();
+      const newRow = new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setCustomId('pushVote')
+            .setLabel('Odeslat')
+            .setStyle('DANGER')
+            .setEmoji('✉️')
+            .setDisabled(true),
+        );
+      await msg1.edit({ content: `> **Čas vypršel.**\nNotifikace nebyla odeslána!`, components: [newRow] });
+    }
   });
 };

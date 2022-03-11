@@ -1,5 +1,4 @@
 const ms = require('ms');
-const version = require('../package.json').version;
 
 module.exports = async (bot, message) => {
     if (message.channel.type.toLocaleUpperCase() === 'DM') return;
@@ -12,7 +11,7 @@ module.exports = async (bot, message) => {
     const args = messageArray.slice(1);
 
     if (config.settings.votingCH && message.channel.id === config.votingCH.channel.id) {
-        if (message.content.startsWith(prefix)) return;
+        if (message.content.startsWith(prefix) || message.content.startsWith(",")) return;
 
         message.react(config.votingCH.reactions.first);
         if (config.votingCH.reactions.second) message.react(config.votingCH.reactions.second);

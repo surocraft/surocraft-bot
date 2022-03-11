@@ -8,3 +8,4 @@ dev-index.js
 json.sqlite
 
 server.js
+commands/admin.js
