@@ -4,7 +4,7 @@ const { MessageActionRow, MessageButton, MessageEmbed } = Discord;
 
 module.exports.config = {
   name: "pushvote", //Name of command - RENAME THE FILE TOO!!!
-  description: "Manually pushes vote notification alert", //Description of command - you can change it :)
+  description: "Manuálně odešle vote notifikaci", //Description of command - you can change it :)
   aliases: ['pvote', 'tovote', 'votepush', 'nvote'], //Command's aliases - set them in config.js
   enable: true //Enable this command? - true or false (boolean)
 };

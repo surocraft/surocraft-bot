@@ -5,7 +5,7 @@ const c = require('chalk');
 
 module.exports.config = {
     name: "status", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the simple status info message about server right now", //Description of command - you can change it :)
+    description: "Pošle stručnou zprávu o aktuálním server stavu", //Description of command - you can change it :)
     aliases: commands.status, //Command's aliases - set them in config.js
     enable: true //Enable this command? - true or false (boolean)
 };

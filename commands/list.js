@@ -5,7 +5,7 @@ const c = require('chalk');
 
 module.exports.config = {
     name: "list", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the actual list of players online", //Description of command - you can change it :)
+    description: "Pošle aktualní seznam online hráčů", //Description of command - you can change it :)
     aliases: commands.list, //Command's aliases - set them in config.js
     enable: true //Enable this command? - true or false (boolean)
 };

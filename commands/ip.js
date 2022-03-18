@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 module.exports.config = {
     name: "ip", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the IP address of server", //Description of command - you can change it :)
+    description: "Pošle IP adresu serveru", //Description of command - you can change it :)
     aliases: commands.ip, //Command's aliases - set them in config.js
     enable: true //Enable this command? - true or false (boolean)
 };

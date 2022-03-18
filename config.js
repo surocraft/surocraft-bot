@@ -119,7 +119,7 @@ module.exports = {
         },
         vote: {
             title: "{serverName} HLASOVÁNÍ:",
-            description: "**Hlasovat pro {serverName} můžeš na:**\nHlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\nDruhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)"
+            description: "**Hlasovat pro {serverName} můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)"
         }
     },
 

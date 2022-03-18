@@ -5,7 +5,7 @@ const warn = require('chalk').keyword('yellow').bold;
 
 module.exports.config = {
     name: "version", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the Minecraft version of server", //Description of command - you can change it :)
+    description: "Pošle Minecraft verzi serveru", //Description of command - you can change it :)
     aliases: commands.version, //Command's aliases - set them in config.js
     enable: true //Enable this command? - true or false (boolean)
 };

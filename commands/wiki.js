@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports.config = {
     name: "wiki", //Name of command - RENAME THE FILE TOO!!!
-    description: "Pošle odkaz na dymapu", //Description of command - you can change it :)
+    description: "Pošle odkaz na wiki", //Description of command - you can change it :)
     aliases: ["wikipedia", "docs", "documentation", "dokumentace", "podpora", "pomoc"], //Command's aliases - set them in config.js
     enable: true //Enable this command? - true or false (boolean)
 };
