@@ -4,19 +4,11 @@ const Discord = require('discord.js'),
     ms = require('ms'),
     { REST } = require('@discordjs/rest'),
     { Routes } = require('discord-api-types/v9'),
-    Intents = Discord.Intents,
-    web = require('./server');
+    Intents = Discord.Intents;
+require('dotenv').config();
 
 //Discord client - I like "bot" more, then "client"
-const bot = new Discord.Client({
-    intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_INTEGRATIONS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.GUILD_MESSAGE_TYPING
-    ]
-});
+const bot = new Discord.Client({ intents: new Intents(32767) });
 
 const config = require('./config'),
     activites = ['PLAYING', 'WATCHING', 'COMPETING', 'LISTENING'], //Supported activites, discord.js supports more (but I don't care)
@@ -54,10 +46,10 @@ bot.emotes = emojis;
 
 if (bot.token === '') { //Checks if you have entered bot token to config
     console.log(`${bot.emotes.error} ` + error('Bot token in config is empty!') + kill);
-    return process.exit(1);
+    process.exit(1);
 } else if (bot.prefix === '') { //Checks if you have entered bot prefix to config
     console.log(`${bot.emotes.error} ` + error('Bot prefix in config is empty!') + kill);
-    return process.exit(1);
+    process.exit(1);
 };
 
 if (bot.status === '') { //Checks if you have entered custom status for bot to config
@@ -93,7 +85,7 @@ if (server.type !== 'java' && server.type !== 'bedrock') {
             server.type = 'java';
         } else {
             console.log(`${bot.emotes.error} ` + error('Unknown server edition') + kill);
-            return process.exit(1);
+            process.exit(1);
         }
     }
 }
@@ -234,21 +226,20 @@ bot.once('ready', async (bot) => {
 const schedule = require('node-schedule');
 
 const votePingRule = new schedule.RecurrenceRule();
-    votePingRule.hour = 17;
-    votePingRule.minute = 00;
-    votePingRule.tz = 'Europe/Prague';
+votePingRule.hour = 17;
+votePingRule.minute = 00;
+votePingRule.tz = 'Europe/Prague';
 
 schedule.scheduleJob(votePingRule, function () {
     const votePingChannel = bot.channels.cache.get('921803832667832380');
     const votePingEmbed = new Discord.MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
     votePingChannel.send({ content: `<@&932655587861364776>\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>`, embeds: [votePingEmbed] });
 });
 
-web();
 //Bot login
 bot.login(bot.token);

@@ -16,7 +16,7 @@ module.exports = {
         type: 'java', //"java" or "bedrock"
         ip: 'mc.surocraft.eu', //IP of your server - do not include port - e.g. "mc.hypixel.net"
         port: '', //PORT of your server - empty => default port (BE 19132, JA 25565)
-        icon: 'https://i.imgur.com/0T74i5U.png', //Link to icon - like "https://website.com/icon.png"
+        icon: 'https://i.imgur.com/Bp1BC8k.png', //Link to icon - like "https://website.com/icon.png"
         version: '1.18.', //Minecraft version of sever
         vote: 'https://minecraftpocket-servers.com/server/113005/vote' //Vote link - like "https://minecraftpocket-servers.com/server/80103/vote/"
     },
@@ -119,7 +119,7 @@ module.exports = {
         },
         vote: {
             title: "{serverName} HLASOVÁNÍ:",
-            description: "**Hlasovat pro {serverName} můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)"
+            description: "**Hlasovat pro {serverName} můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)"
         }
     },
 
