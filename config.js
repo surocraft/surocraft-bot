@@ -6,7 +6,8 @@ module.exports = {
     bot: {
         token: token, //Your bot token - https://tinyurl.com/discordbot-token
         prefix: '-', //Your custom prefix of the bot, like "!" or "."
-        status: '{onlinePlayers} online', //Custom activity/status text
+        presence: '{onlinePlayers} hráčů online', //Custom activity/status text
+        status: 'ONLINE',  //You can choose: ONLINE, IDLE, DND (do not disturb), INVISIBLE
         activity: 'WATCHING' //You can choose: PLAYING, LISTENING, WATCHING, COMPETING
     },
 
@@ -15,7 +16,7 @@ module.exports = {
         name: 'SuroCraft', //Your server name
         type: 'java', //"java" or "bedrock"
         ip: 'mc.surocraft.eu', //IP of your server - do not include port - e.g. "mc.hypixel.net"
-        port: '', //PORT of your server - empty => default port (BE 19132, JA 25565)
+        port: '25565', //PORT of your server - empty => default port (BE 19132, JA 25565)
         icon: 'https://i.imgur.com/Bp1BC8k.png', //Link to icon - like "https://website.com/icon.png"
         version: '1.18.', //Minecraft version of sever
         vote: 'https://minecraftpocket-servers.com/server/113005/vote' //Vote link - like "https://minecraftpocket-servers.com/server/80103/vote/"
@@ -36,7 +37,7 @@ module.exports = {
 
     //Period of auto changing status if you are using {onlinePlayers} or {maxPlayers} in bot's status
     autoStatus: {
-        time: '30s'
+        time: '10s'
     },
 
     //Voting channel - https://docs.petyxbron.cz/config/config-info#voting-ch
@@ -57,7 +58,7 @@ module.exports = {
 
     //Auto changing status message
     statusCH: {
-        time: '30s', //How long should the status always be updated? - like "3min", "20s" or "1min" etc.
+        time: '10s', //How long should the status always be updated? - like "3min", "20s" or "1min" etc.
         guild: {
             id: '812280438490923048',
         },
@@ -86,6 +87,10 @@ module.exports = {
 
     //Custom text settings
     messages: {
+        help: {
+            title: "SuroBot příkazy:",
+            description: "> **Prefix:** \`{prefix}\`\n> **Příkazy:\n**{commands}"
+        },
         ip: {
             title: "{serverName} IP:",
             description: "**JAVA** \`{serverIp}\`:\`{serverPort}\`\n**BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`"
@@ -125,6 +130,13 @@ module.exports = {
 
     //Commands aliases
     commands: {
+        help: [
+            'help',
+            'commands',
+            'menu',
+            'pomoc',
+            'prikazy'
+        ],
         status: [
             's',
             'info',

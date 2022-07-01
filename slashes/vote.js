@@ -26,7 +26,7 @@ module.exports.run = async (bot, interaction) => {
         text.vote.title = text.vote.title.replace('{voteLink}', config.server.vote);
         text.vote.title = text.vote.title.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
 
-        nickname = message.member.displayName
+        nickname = interaction.member.displayName
         text.vote.description = `**Hlasovat pro {serverName} můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote?username=${nickname})__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote?username=${nickname})__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote?nickname=${nickname})__** (získáš 1K navíc)`
         text.vote.description = text.vote.description.replace('{serverIp}', server.ip);
         text.vote.description = text.vote.description.replace('{serverPort}', server.port);
@@ -39,6 +39,6 @@ module.exports.run = async (bot, interaction) => {
             .setTitle(text.vote.title)
             .setDescription(text.vote.description)
             .setColor(config.embeds.color);
-        interaction.reply({ embeds: [voteEmbed] });
+        interaction.reply({ embeds: [voteEmbed], ephemeral: true });
     }
 };

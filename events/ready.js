@@ -14,57 +14,62 @@ module.exports = async (bot) => {
     const debug = config.settings.debug;
     var warns = config.settings.warns;
 
-    if (bot.status) {
-        if (bot.status.includes("{onlinePlayers}") | bot.status.includes("{maxPlayers}")) {
-            setInterval(async () => {
-                let status = bot.status;
+    if (bot.pres) {
+        let presence = config.bot.presence,
+            status = config.bot.status.toLowerCase(),
+            activity = config.bot.activity.toUpperCase();
+        if (bot.pres.includes("{onlinePlayers}") | bot.pres.includes("{maxPlayers}")) {
+            async function autoUpdatingPresence() {
+                let errored = false,
+                    result = undefined;
 
                 if (server.type === 'java') {
                     try {
-                        var result = await util.status(server.ip, server.port);
+                        result = await util.status(server.ip, server.port);
                     } catch (err) {
                         console.log();
-                        var errored = true;
+                        errored = true;
                     }
                 } else {
                     try {
-                        var result = await util.statusBedrock(server.ip, server.port);
+                        result = await util.statusBedrock(server.ip, server.port);
                     } catch (err) {
                         console.log();
-                        var errored = true;
+                        errored = true;
                     }
                 };
 
                 if (!errored) {
-                    if (status.includes("{onlinePlayers}")) {
-                        status = status.replace("{onlinePlayers}", result.players.online);
+                    if (presence.includes("{onlinePlayers}")) {
+                        presence = presence.replaceAll("{onlinePlayers}", result.players.online);
                     };
 
-                    if (status.includes("{maxPlayers}")) {
-                        status = status.replace("{maxPlayers}", result.players.max);
+                    if (presence.includes("{maxPlayers}")) {
+                        presence = presence.replaceAll("{maxPlayers}", result.players.max);
                     };
 
                     try {
-                        bot.user.setActivity(status, { type: bot.activity }); //Sets bot activity
-                        if (debug) console.log(`${bot.emotes.success} Successfully set status to ` + gr(`${bot.activity.toLowerCase()} ${status}`));
+                        bot.user.setPresence({ activities: [{ name: presence }], status: status, type: activity, afk: false }); //Sets bot activity
+                        if (debug) console.log(`${bot.emotes.success} Successfully set presence to ` + gr(`${bot.activity.toLowerCase()} ${presence}`));
                     } catch (e) {
                         console.log();
                     }
                 } else {
-                    const status = "Offline";
+                    const presence = "Offline";
                     try {
-                        bot.user.setActivity(status, { type: bot.activity }); //Sets bot activity
-                        if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Status set to ') + gr(`${bot.activity.toLowerCase()} ${status}`));
+                        bot.user.setPresence({ activities: [{ name: presence }], status: status, type: activity, afk: false }); //Sets bot activity
+                        if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Presence set to ') + gr(`${bot.activity.toLowerCase()} ${presence}`));
                     } catch (e) {
                         console.log();
                     }
                 }
-
-            }, ms(config.autoStatus.time));
+            }
+            autoUpdatingPresence()
+            setInterval(autoUpdatingPresence, ms(config.autoStatus.time));
         } else {
             try {
-                bot.user.setActivity(bot.status, { type: bot.activity }); //Sets bot activity
-                console.log(`${bot.emotes.success} Successfully set status to ` + gr(`${bot.activity.toLowerCase()} ${bot.status}`));
+                bot.user.setPresence({ activities: [{ name: presence }], status: status, type: activity, afk: false }); //Sets bot activity
+                if (debug) console.log(`${bot.emotes.success} Successfully set presence to ` + gr(`${bot.activity.toLowerCase()} ${bot.pres}`));
             } catch (e) {
                 console.log();
             }
@@ -111,6 +116,10 @@ module.exports = async (bot) => {
                     const versionOriginal = result.version.name;
                     let versionAdvanced = false;
 
+                    let maintenceStatus = false,
+                        lowCaseMotdClean = result.motd.clean.toLocaleLowerCase();
+                    if (lowCaseMotdClean.includes("maintenance")) maintenceStatus = true;
+
                     if (settings.split) {
                         versionAdvanced = versionOriginal.toLocaleLowerCase()
                             .replace("bukkit ", "")
@@ -145,7 +154,7 @@ module.exports = async (bot) => {
 
                     const serverEmbed = new Discord.MessageEmbed()
                         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-                        .setDescription(`:white_check_mark: **ONLINE**`)
+                        .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                         .addFields(
                             { name: "PLAYERS", value: `${result.players.online}/${result.players.max}` + trueList, inline: false },
                             { name: "INFO", value: `${server.type.toUpperCase()} ${version}\n\`${server.ip}\`:\`${server.port}\``, inline: true }
@@ -171,6 +180,10 @@ module.exports = async (bot) => {
                 .then((result) => {
                     const versionOriginal = result.version.name;
                     let versionAdvanced = false;
+
+                    let maintenceStatus = false,
+                        lowCaseMotdClean = result.motd.clean.toLocaleLowerCase();
+                    if (lowCaseMotdClean.includes("maintenance")) maintenceStatus = true;
 
                     if (settings.split) {
                         versionAdvanced = versionOriginal.toLocaleLowerCase()
@@ -204,7 +217,7 @@ module.exports = async (bot) => {
 
                     const serverEmbed = new Discord.MessageEmbed()
                         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-                        .setDescription(`:white_check_mark: **ONLINE**`)
+                        .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                         .addFields(
                             { name: "PLAYERS", value: `${result.players.online}/${result.players.max}`, inline: false },
                             { name: "INFO", value: `${server.type.toUpperCase()} ${version}\n\`${server.ip}\`:\`${server.port}\``, inline: true }
@@ -235,6 +248,10 @@ module.exports = async (bot) => {
                     .then((result) => {
                         const versionOriginal = result.version.name;
                         let versionAdvanced = false;
+
+                        let maintenceStatus = false,
+                            lowCaseMotdClean = result.motd.clean.toLocaleLowerCase();
+                        if (lowCaseMotdClean.includes("maintenance")) maintenceStatus = true;
 
                         if (settings.split) {
                             versionAdvanced = versionOriginal.toLocaleLowerCase()
@@ -270,7 +287,7 @@ module.exports = async (bot) => {
 
                         const serverEmbed = new Discord.MessageEmbed()
                             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-                            .setDescription(`:white_check_mark: **ONLINE**`)
+                            .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                             .addFields(
                                 { name: "PLAYERS", value: `${result.players.online}/${result.players.max}` + trueList, inline: false },
                                 { name: "INFO", value: `${server.type.toUpperCase()} ${version}\n\`${server.ip}\`:\`${server.port}\``, inline: true }
@@ -297,6 +314,10 @@ module.exports = async (bot) => {
                     .then((result) => {
                         const versionOriginal = result.version.name;
                         let versionAdvanced = false;
+
+                        let maintenceStatus = false,
+                            lowCaseMotdClean = result.motd.clean.toLocaleLowerCase();
+                        if (lowCaseMotdClean.includes("maintenance")) maintenceStatus = true;
 
                         if (settings.split) {
                             versionAdvanced = versionOriginal.toLocaleLowerCase()
@@ -330,7 +351,7 @@ module.exports = async (bot) => {
 
                         const serverEmbed = new Discord.MessageEmbed()
                             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-                            .setDescription(`:white_check_mark: **ONLINE**`)
+                            .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                             .addFields(
                                 { name: "PLAYERS", value: `${result.players.online}/${result.players.max}`, inline: false },
                                 { name: "INFO", value: `${server.type.toUpperCase()} ${version}\n\`${server.ip}\`:\`${server.port}\``, inline: true }
@@ -359,7 +380,7 @@ module.exports = async (bot) => {
         if (server.type === 'java') {
             util.status(server.ip, server.port)
                 .then((result) => {
-                    console.log(`${bot.emotes.success} Successfully located ${gr(server.type)} server ${gr(server.ip)}!\n` + "   " + gr('Server info:\n')
+                    console.log(`${bot.emotes.success} Successfully located ${gr(server.type.toUpperCase())} server ${gr(server.ip)}!\n` + "   " + gr('Server info:\n')
                         + "   " + bold('IP:	 ') + bl(`${server.ip}:${result.port ? result.port : server.port}\n`)
                         + "   " + bold('VERSION: ') + bl(`${result.version.name ? result.version.name : 'unknown'}\n`)
                         + "   " + bold('PLAYERS: ') + bl(`${result.players.online ? result.players.online : '0'}` + '/' + `${result.players.max ? result.players.max : '0'}`)
@@ -371,7 +392,7 @@ module.exports = async (bot) => {
         } else if (server.type === 'bedrock') {
             util.statusBedrock(server.ip, server.port)
                 .then((result) => {
-                    console.log(`${bot.emotes.success} Successfully located ${gr(server.type)} server ${gr(server.ip)}!\n` + "   " + gr('Server info:\n')
+                    console.log(`${bot.emotes.success} Successfully located ${gr(server.type.toUpperCase())} server ${gr(server.ip)}!\n` + "   " + gr('Server info:\n')
                         + "   " + bold('IP:	 ') + bl(`${server.ip}:${result.port ? result.port : server.port}\n`)
                         + "   " + bold('VERSION: ') + bl(`${result.version.name ? result.version.name : 'unknown'}\n`)
                         + "   " + bold('PLAYERS: ') + bl(`${result.players.online ? result.players.online : '0'}` + '/' + `${result.players.max ? result.players.max : '0'}`)
