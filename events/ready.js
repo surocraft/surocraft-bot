@@ -19,7 +19,7 @@ module.exports = async (bot) => {
             status = config.bot.status.toLowerCase(),
             activity = config.bot.activity.toUpperCase();
         if (bot.pres.includes("{onlinePlayers}") | bot.pres.includes("{maxPlayers}")) {
-            async function autoUpdatingPresence() {
+            async function autoUpdatingPresence() { //autoUpdatingPresence loop for refreshing bot presence and status
                 let errored = false,
                     result = undefined;
 
@@ -49,7 +49,7 @@ module.exports = async (bot) => {
                     };
 
                     try {
-                        bot.user.setPresence({ activities: [{ name: presence }], status: status, type: activity, afk: false }); //Sets bot activity
+                        await bot.user.setPresence({ activities: [{ name: presence, type: activity }], status: status, afk: false }); //Sets bot activity
                         if (debug) console.log(`${bot.emotes.success} Successfully set presence to ` + gr(`${bot.activity.toLowerCase()} ${presence}`));
                     } catch (e) {
                         console.log();
@@ -57,18 +57,20 @@ module.exports = async (bot) => {
                 } else {
                     const presence = "Offline";
                     try {
-                        bot.user.setPresence({ activities: [{ name: presence }], status: status, type: activity, afk: false }); //Sets bot activity
+                        await bot.user.setPresence({ activities: [{ name: presence, type: activity }], status: status, afk: false }); //Sets bot activity
                         if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Presence set to ') + gr(`${bot.activity.toLowerCase()} ${presence}`));
                     } catch (e) {
                         console.log();
                     }
                 }
+                presence = config.bot.presence;
+                setTimeout(autoUpdatingPresence, ms(config.autoStatus.time));
             }
-            autoUpdatingPresence()
-            setInterval(autoUpdatingPresence, ms(config.autoStatus.time));
+
+            autoUpdatingPresence();
         } else {
             try {
-                bot.user.setPresence({ activities: [{ name: presence }], status: status, type: activity, afk: false }); //Sets bot activity
+                bot.user.setPresence({ activities: [{ name: presence, type: activity }], status: status, afk: false }); //Sets bot activity
                 if (debug) console.log(`${bot.emotes.success} Successfully set presence to ` + gr(`${bot.activity.toLowerCase()} ${bot.pres}`));
             } catch (e) {
                 console.log();
