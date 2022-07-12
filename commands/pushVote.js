@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const ms = require('ms');
 const { MessageActionRow, MessageButton, MessageEmbed } = Discord;
+const fs = require('fs');
+const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
   name: "pushvote", //Name of command - RENAME THE FILE TOO!!!

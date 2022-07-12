@@ -1,6 +1,6 @@
 {
   "name": "surocraft-bot",
-  "version": "2.3.6",
+  "version": "2.3.7",
   "description": "Discord Minecraft bot for SuroCraft server",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "@discordjs/rest": "^0.5.0",
     "axios": "^0.27.2",
     "chalk": "4.1.2",
-    "discord-api-types": "^0.36.0",
+    "discord-api-types": "^0.36.1",
     "discord-timestamp": "^1.0.2",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.0",
@@ -26,7 +26,7 @@
     "minecraft-server-util": "^5.2.10",
     "ms": "^2.1.3",
     "node-schedule": "^2.1.0",
-    "quick.db": "^7.1.3"
+    "quick.db": "7.1.3"
   },
   "bugs": {
     "url": "https://github.com/surocraft/surocraft-bot/issues"

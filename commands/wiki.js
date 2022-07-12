@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const fs = require('fs');
+const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
     name: "wiki", //Name of command - RENAME THE FILE TOO!!!

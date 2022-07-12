@@ -11,7 +11,7 @@ module.exports = {
         activity: 'WATCHING' //You can choose: PLAYING, LISTENING, WATCHING, COMPETING
     },
 
-    //Your minecraft server data
+    //Your Minecraft server data
     server: {
         name: 'SuroCraft', //Your server name
         type: 'java', //"java" or "bedrock"
@@ -85,89 +85,101 @@ module.exports = {
         }
     },
 
-    //Custom text settings
-    messages: {
+    //All commands settings
+    commands: {
+        enableSlashes: true, //If you want to disable only specific slashes, leave this true and go down
+        //List of all commands:
         help: {
-            title: "SuroBot příkazy:",
-            description: "> **Prefix:** \`{prefix}\`\n> **Příkazy:\n**{commands}"
+            enableNormal: true, //Enables normal command
+            enableSlash: true, //Enables slash command
+            aliases: [ //Only for normal commands
+                'help', 'commands', 'menu', 'pomoc', 'prikazy'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                title: "SuroBot příkazy:",
+                description: "> **Prefix:** \`{prefix}\`\n> **Příkazy:**\n{commands}",
+                errorTitle: "Chyba! Příkaz \"{arg0}\" neexistuje.",
+                errorDescription: "Příkaz `{arg0}` nebyl nalezen.\nZadaváš chybný alias nebo je příkaz vypnut."
+            }
         },
         ip: {
-            title: "{serverName} IP:",
-            description: "**JAVA** \`{serverIp}\`:\`{serverPort}\`\n**BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`"
+            enableNormal: true, //Enables normal command
+            enableSlash: true, //Enables slash command
+            aliases: [ //Only for normal commands
+                'i', 'ip-address', 'address', 'connect', 'join'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                title: "{serverName} IP:",
+                description: "**JAVA** \`{serverIp}\`:\`{serverPort}\`\n**BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`"
+            }
         },
         list: {
-            title: "{serverName} list:",
-            description: "**{playersOnline}**/**{playersMax}**",
-            listFormat: "```{playersList}```"
+            enableNormal: true, //Enables normal command
+            enableSlash: true, //Enables slash command
+            aliases: [ //Only for normal commands
+                'l', 'players', 'plist'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                title: "{serverName} list:",
+                description: "**{playersOnline}**/**{playersMax}**",
+                listFormat: "```{playersList}```"
+            }
         },
         status: {
-            title: "Server status:",
-            description:
-            `:white_check_mark: **ONLINE**
-            
-            **IP Adresa**
-            **JAVA** \`mc.surocraft.eu\`:\`25565\`
-            **BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`
-            
-            **Verze**
-            {serverVersion}
-            
-            **Hráči**
-            **{playersOnline}**/**{playersMax}**`,
+            enableNormal: true, //Enables normal command
+            enableSlash: true, //Enables slash command
+            aliases: [ //Only for normal commands
+                's', 'info', 'server', 'overview', 'ov'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                title: "Server status:",
+                description:
+                    `:white_check_mark: **ONLINE**
+                    
+                    **IP Adresa**
+                    **JAVA** \`mc.surocraft.eu\`:\`25565\`
+                    **BEDROCK** \`mcbe.surocraft.eu\`:\`19132\`
+                    
+                    **Verze**
+                    {serverVersion}
+                    
+                    **Hráči**
+                    **{playersOnline}**/**{playersMax}**`,
+            }
         },
         test: {
-            content: "Zdravím!"
+            enableNormal: true, //Enables normal command
+            //Test command doesn't have slash type. Is it really neccesary?
+            aliases: [ //Only for normal commands
+                't', 'try', 'testing'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                content: "Zdravím!"
+            }
         },
         version: {
-            title: "{serverName} verze:",
-            description: "Java {serverVersion}\nBedrock 1.8.*"
+            enableNormal: true, //Enables normal command
+            enableSlash: true, //Enables slash command
+            aliases: [ //Only for normal commands
+                'v', 'ver'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                title: "{serverName} verze:",
+                description: "Java {serverVersion}\nBedrock 1.19.*"
+            }
         },
         vote: {
-            title: "{serverName} HLASOVÁNÍ:",
-            description: "**Hlasovat pro {serverName} můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)"
-        }
-    },
-
-    //Commands aliases
-    commands: {
-        help: [
-            'help',
-            'commands',
-            'menu',
-            'pomoc',
-            'prikazy'
-        ],
-        status: [
-            's',
-            'info',
-            'server',
-            'overview',
-            'ov'
-        ],
-        test: [
-            't',
-            'try',
-            'testing'
-        ],
-        ip: [
-            'i',
-            'ip-address',
-            'address',
-            'connect',
-            'join'
-        ],
-        list: [
-            'l',
-            'players',
-            'plist'
-        ],
-        vote: [
-            'votelink'
-        ],
-        version: [
-            'v',
-            'ver'
-        ]
+            enableNormal: true, //Enables normal command
+            enableSlash: true, //Enables slash command
+            aliases: [ //Only for normal commands
+                'votelink'
+            ],
+            text: { //Custom text settings (for translating or customization)
+                title: "{serverName} HLASOVÁNÍ:",
+                description: "**Hlasovat pro {serverName} můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)"
+            }
+        },
     }
 };
+
 //CONFIG DATA EXPLANATION - https://docs.petyxbron.cz/config/config-info

@@ -2,15 +2,18 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const util = require('minecraft-server-util');
 const Discord = require('discord.js');
 const c = require('chalk');
+const fs = require('fs');
+const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('status') //Name of command - RENAME THE FILE TOO!!!
-        .setDescription(`Sends the simple status info message about server right now`) //Description of command - you can change it :)
+        .setDescription(`Pošle stručnou zprávu o aktuálním server stavu`) //Description of command - you can change it :)
 };
 
 module.exports.run = async (bot, interaction) => {
-    const { server, config, text } = bot,
+    let { server, config } = bot,
+        text = commands.status.text,
         settings = config.settings,
         warn = c.keyword('yellow').bold,
         warns = config.settings.warns;
@@ -27,6 +30,10 @@ module.exports.run = async (bot, interaction) => {
             .then((result) => {
                 const versionOriginal = result.version.name;
                 let versionAdvanced = false;
+
+                let maintenceStatus = false,
+                    lowCaseMotdClean = result.motd.clean.toLocaleLowerCase();
+                if (lowCaseMotdClean.includes("maintenance")) maintenceStatus = true;
 
                 if (settings.split) {
                     versionAdvanced = versionOriginal.toLocaleLowerCase()
@@ -58,11 +65,11 @@ module.exports.run = async (bot, interaction) => {
 
                 const version = versionAdvanced ? versionAdvanced.charAt(0).toUpperCase() + versionAdvanced.slice(1) : versionOriginal;
 
-                if (text.status.title === "" || text.status.description === "") {
+                if (text.title === "" || text.description === "") {
                     const serverEmbed = new Discord.MessageEmbed()
                         .setAuthor({ name: config.server.name ? config.server.name : interaction.guild.name, iconURL: icon })
                         .setTitle("Server status:")
-                        .setDescription(`:white_check_mark: **ONLINE**
+                        .setDescription(`${maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**"}
 
                         **Description**
                         ${result.motd.clean}
@@ -78,30 +85,32 @@ module.exports.run = async (bot, interaction) => {
                         .setColor(config.embeds.color);
                     interaction.reply({ embeds: [serverEmbed] });
                 } else {
-                    text.status.title = text.status.title.replace('{serverIp}', server.ip);
-                    text.status.title = text.status.title.replace('{serverPort}', server.port);
-                    text.status.title = text.status.title.replace('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
-                    text.status.title = text.status.title.replace('{voteLink}', config.server.vote);
-                    text.status.title = text.status.title.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
-                    text.status.title = text.status.title.replace('{playersOnline}', result.players.online);
-                    text.status.title = text.status.title.replace('{playersMax}', result.players.max);
-                    text.status.title = text.status.title.replace('{motd}', result.motd.clean);
-                    text.status.title = text.status.title.replace('{serverVersion}', version);
+                    text.title = text.title.replaceAll('{serverIp}', server.ip);
+                    text.title = text.title.replaceAll('{serverPort}', server.port);
+                    text.title = text.title.replaceAll('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
+                    text.title = text.title.replaceAll('{voteLink}', config.server.vote);
+                    text.title = text.title.replaceAll('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
+                    text.title = text.title.replaceAll('{playersOnline}', result.players.online);
+                    text.title = text.title.replaceAll('{playersMax}', result.players.max);
+                    text.title = text.title.replaceAll('{motd}', result.motd.clean);
+                    text.title = text.title.replaceAll('{serverVersion}', version);
+                    text.title = text.title.replaceAll('{status}', maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**");
 
-                    text.status.description = text.status.description.replace('{serverIp}', server.ip);
-                    text.status.description = text.status.description.replace('{serverPort}', server.port);
-                    text.status.description = text.status.description.replace('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
-                    text.status.description = text.status.description.replace('{voteLink}', config.server.vote);
-                    text.status.description = text.status.description.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
-                    text.status.description = text.status.description.replace('{playersOnline}', result.players.online);
-                    text.status.description = text.status.description.replace('{playersMax}', result.players.max);
-                    text.status.description = text.status.description.replace('{motd}', result.motd.clean);
-                    text.status.description = text.status.description.replace('{serverVersion}', version);
+                    text.description = text.description.replaceAll('{serverIp}', server.ip);
+                    text.description = text.description.replaceAll('{serverPort}', server.port);
+                    text.description = text.description.replaceAll('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
+                    text.description = text.description.replaceAll('{voteLink}', config.server.vote);
+                    text.description = text.description.replaceAll('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
+                    text.description = text.description.replaceAll('{playersOnline}', result.players.online);
+                    text.description = text.description.replaceAll('{playersMax}', result.players.max);
+                    text.description = text.description.replaceAll('{motd}', result.motd.clean);
+                    text.description = text.description.replaceAll('{serverVersion}', version);
+                    text.description = text.description.replaceAll('{status}', maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**");
 
                     const serverEmbed = new Discord.MessageEmbed()
                         .setAuthor({ name: config.server.name ? config.server.name : interaction.guild.name, iconURL: icon })
-                        .setTitle(text.status.title)
-                        .setDescription(text.status.description)
+                        .setTitle(text.title)
+                        .setDescription(text.description)
                         .setColor(config.embeds.color);
                     interaction.reply({ embeds: [serverEmbed] });
                 }
@@ -122,6 +131,10 @@ module.exports.run = async (bot, interaction) => {
                 const versionOriginal = result.version.name;
                 let versionAdvanced = false;
 
+                let maintenceStatus = false,
+                    lowCaseMotdClean = result.motd.clean.toLocaleLowerCase();
+                if (lowCaseMotdClean.includes("maintenance")) maintenceStatus = true;
+
                 if (settings.split) {
                     versionAdvanced = versionOriginal.toLocaleLowerCase()
                         .replace("bukkit ", "")
@@ -152,11 +165,11 @@ module.exports.run = async (bot, interaction) => {
 
                 const version = versionAdvanced ? versionAdvanced.charAt(0).toUpperCase() + versionAdvanced.slice(1) : versionOriginal;
 
-                if (text.status.title === "" || text.status.description === "") {
+                if (text.title === "" || text.description === "") {
                     const serverEmbed = new Discord.MessageEmbed()
                         .setAuthor({ name: config.server.name ? config.server.name : interaction.guild.name, iconURL: icon })
                         .setTitle("Server status:")
-                        .setDescription(`:white_check_mark: **ONLINE**
+                        .setDescription(`${maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**"}
 
                         **Description**
                         ${result.motd.clean}
@@ -172,30 +185,32 @@ module.exports.run = async (bot, interaction) => {
                         .setColor(config.embeds.color);
                     interaction.reply({ embeds: [serverEmbed] });
                 } else {
-                    text.status.title = text.status.title.replace('{serverIp}', server.ip);
-                    text.status.title = text.status.title.replace('{serverPort}', server.port);
-                    text.status.title = text.status.title.replace('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
-                    text.status.title = text.status.title.replace('{voteLink}', config.server.vote);
-                    text.status.title = text.status.title.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
-                    text.status.title = text.status.title.replace('{playersOnline}', result.players.online);
-                    text.status.title = text.status.title.replace('{playersMax}', result.players.max);
-                    text.status.title = text.status.title.replace('{motd}', result.motd.clean);
-                    text.status.title = text.status.title.replace('{serverVersion}', version);
+                    text.title = text.title.replaceAll('{serverIp}', server.ip);
+                    text.title = text.title.replaceAll('{serverPort}', server.port);
+                    text.title = text.title.replaceAll('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
+                    text.title = text.title.replaceAll('{voteLink}', config.server.vote);
+                    text.title = text.title.replaceAll('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
+                    text.title = text.title.replaceAll('{playersOnline}', result.players.online);
+                    text.title = text.title.replaceAll('{playersMax}', result.players.max);
+                    text.title = text.title.replaceAll('{motd}', result.motd.clean);
+                    text.title = text.title.replaceAll('{serverVersion}', version);
+                    text.title = text.title.replaceAll('{status}', maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**");
 
-                    text.status.description = text.status.description.replace('{serverIp}', server.ip);
-                    text.status.description = text.status.description.replace('{serverPort}', server.port);
-                    text.status.description = text.status.description.replace('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
-                    text.status.description = text.status.description.replace('{voteLink}', config.server.vote);
-                    text.status.description = text.status.description.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
-                    text.status.description = text.status.description.replace('{playersOnline}', result.players.online);
-                    text.status.description = text.status.description.replace('{playersMax}', result.players.max);
-                    text.status.description = text.status.description.replace('{motd}', result.motd.clean);
-                    text.status.description = text.status.description.replace('{serverVersion}', version);
+                    text.description = text.description.replaceAll('{serverIp}', server.ip);
+                    text.description = text.description.replaceAll('{serverPort}', server.port);
+                    text.description = text.description.replaceAll('{serverName}', config.server.name ? config.server.name : interaction.guild.name);
+                    text.description = text.description.replaceAll('{voteLink}', config.server.vote);
+                    text.description = text.description.replaceAll('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
+                    text.description = text.description.replaceAll('{playersOnline}', result.players.online);
+                    text.description = text.description.replaceAll('{playersMax}', result.players.max);
+                    text.description = text.description.replaceAll('{motd}', result.motd.clean);
+                    text.description = text.description.replaceAll('{serverVersion}', version);
+                    text.description = text.description.replaceAll('{status}', maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**");
 
                     const serverEmbed = new Discord.MessageEmbed()
                         .setAuthor({ name: config.server.name ? config.server.name : interaction.guild.name, iconURL: icon })
-                        .setTitle(text.status.title)
-                        .setDescription(text.status.description)
+                        .setTitle(text.title)
+                        .setDescription(text.description)
                         .setColor(config.embeds.color);
                     interaction.reply({ embeds: [serverEmbed] });
                 }

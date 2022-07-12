@@ -14,6 +14,7 @@ let dev;
 try { if (fs.existsSync('./dev-config.js')) { dev = true; } }
 catch (err) { console.error(err); }
 const config = require(dev ? './dev-config' : './config'),
+    { commands } = config,
     activites = ['PLAYING', 'WATCHING', 'COMPETING', 'LISTENING'], //Supported activites, discord.js supports more (but I don't care)
     statuses = ['online', 'idle', 'dnd', 'invisible'], //Supported statuses
     error = c.keyword('red').bold,
@@ -86,7 +87,7 @@ if (!bot.status) { //Checks if you have entered status activity type to config
 if (!new Set(statuses).has(bot.status.toLowerCase())) { //Checks if you have entered supported activity
     if (bot.pres) {
         if (bot.status.toLowerCase() === "do not disturb") {
-            bot.status = "dnd"
+            bot.status = "dnd";
         } else {
             if (warns) console.log(`${bot.emotes.warn} ` + warn(`"${bot.status}" status is not supported. Bot presence was disabled.`));
             bot.pres = false;
@@ -203,7 +204,6 @@ bot.settings.split = bot.settings.readyScan;
 bot.server = server;
 bot.config = config;
 bot.info = info;
-bot.text = config.messages;
 
 //Event handler
 const eventsFolder = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
@@ -218,34 +218,40 @@ const commandsFolder = fs.readdirSync('./commands').filter(file => file.endsWith
 for (const file of commandsFolder) {
     const commandFile = require(`./commands/${file}`);
     const command = file.split(".")[0];
-    bot.commands.set(command, commandFile);
-    commandFile.config.aliases.forEach(alias => {
-        bot.aliases.set(alias, command);
-    });
+    if (!!commands[command] && !!commands[command].enableNormal || !!commandFile.config.enable) {
+        bot.commands.set(command, commandFile);
+        commandFile.config.aliases.forEach(alias => {
+            bot.aliases.set(alias, command);
+        });
+    }
 };
 
 //Slash command handler
-let slashCommands = [];
-const slashCommandsFolder = fs.readdirSync('./slashes').filter(file => file.endsWith('.js'));
-for (const file of slashCommandsFolder) {
-    const commandFile = require(`./slashes/${file}`);
-    const slashCommand = file.split(".")[0];
-    bot.slashes.set(slashCommand, commandFile);
-    slashCommands.push(commandFile.data.toJSON());
-};
-
-bot.once('ready', async (bot) => {
-    const rest = new REST({ version: '9' }).setToken(bot.token);
-
-    try {
-        await rest.put(
-            Routes.applicationCommands(bot.user.id),
-            { body: slashCommands },
-        );
-    } catch (err) {
-        console.log(err);
+if (commands.enableSlashes) {
+    let slashCommands = [];
+    const slashCommandsFolder = fs.readdirSync('./slashes').filter(file => file.endsWith('.js'));
+    for (const file of slashCommandsFolder) {
+        const commandFile = require(`./slashes/${file}`);
+        const slashCommand = file.split(".")[0];
+        if (!!commands[slashCommand] && !!commands[slashCommand].enableSlash) {
+            bot.slashes.set(slashCommand, commandFile);
+            slashCommands.push(commandFile.data.toJSON());
+        }
     };
-});
+
+    bot.once('ready', async (bot) => {
+        const rest = new REST({ version: '9' }).setToken(bot.token);
+
+        try {
+            await rest.put(
+                Routes.applicationCommands(bot.user.id),
+                { body: slashCommands },
+            );
+        } catch (err) {
+            console.log(err);
+        };
+    });
+}
 
 const schedule = require('node-schedule');
 

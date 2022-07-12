@@ -1,18 +1,18 @@
-const { commands } = require("../config");
 const Discord = require('discord.js');
+const fs = require('fs');
+const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
     name: "ip", //Name of command - RENAME THE FILE TOO!!!
     description: "Pošle IP adresu serveru", //Description of command - you can change it :)
-    aliases: commands.ip, //Command's aliases - set them in config.js
-    enable: true //Enable this command? - true or false (boolean)
+    aliases: commands.ip.aliases //Command's aliases - set them in config.js
 };
 
 module.exports.run = async (bot, message, args) => {
-    const { server, config, text } = bot;
-    let icon = server.icon ? server.icon : message.guild.iconURL();
-
-    if (text.ip.title === "" || text.ip.description === "") {
+    let { server, config } = bot,
+        text = commands.ip.text,
+        icon = server.icon ? server.icon : message.guild.iconURL();
+    if (text.title === "" || text.description === "") {
         const ipEmbed = new Discord.MessageEmbed()
             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
             .setTitle("IP address:")
@@ -20,22 +20,22 @@ module.exports.run = async (bot, message, args) => {
             .setColor(config.embeds.color);
         message.channel.send({ embeds: [ipEmbed] });
     } else {
-        text.ip.title = text.ip.title.replace('{serverIp}', server.ip);
-        text.ip.title = text.ip.title.replace('{serverPort}', server.port);
-        text.ip.title = text.ip.title.replace('{serverName}', config.server.name ? config.server.name : message.guild.name);
-        text.ip.title = text.ip.title.replace('{voteLink}', config.server.vote);
-        text.ip.title = text.ip.title.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
+        text.title = text.title.replaceAll('{serverIp}', server.ip);
+        text.title = text.title.replaceAll('{serverPort}', server.port);
+        text.title = text.title.replaceAll('{serverName}', config.server.name ? config.server.name : message.guild.name);
+        text.title = text.title.replaceAll('{voteLink}', config.server.vote);
+        text.title = text.title.replaceAll('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
 
-        text.ip.description = text.ip.description.replace('{serverIp}', server.ip);
-        text.ip.description = text.ip.description.replace('{serverPort}', server.port);
-        text.ip.description = text.ip.description.replace('{serverName}', config.server.name ? config.server.name : message.guild.name);
-        text.ip.description = text.ip.description.replace('{voteLink}', config.server.vote);
-        text.ip.description = text.ip.description.replace('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
+        text.description = text.description.replaceAll('{serverIp}', server.ip);
+        text.description = text.description.replaceAll('{serverPort}', server.port);
+        text.description = text.description.replaceAll('{serverName}', config.server.name ? config.server.name : message.guild.name);
+        text.description = text.description.replaceAll('{voteLink}', config.server.vote);
+        text.description = text.description.replaceAll('{serverType}', config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1));
 
         const ipEmbed = new Discord.MessageEmbed()
             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
-            .setTitle(text.ip.title)
-            .setDescription(text.ip.description)
+            .setTitle(text.title)
+            .setDescription(text.description)
             .setColor(config.embeds.color);
         message.channel.send({ embeds: [ipEmbed] });
     }

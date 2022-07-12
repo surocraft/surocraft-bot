@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const Timestamp = require('discord-timestamp');
 const ms = require('ms');
+const fs = require('fs');
+const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
   name: "ban", //Name of command - RENAME THE FILE TOO!!!
