@@ -262,13 +262,34 @@ votePingRule.tz = 'Europe/Prague';
 
 schedule.scheduleJob(votePingRule, function () {
     const votePingChannel = bot.channels.cache.get('921803832667832380');
-    const votePingEmbed = new Discord.MessageEmbed()
+    const { MessageActionRow, MessageButton, MessageEmbed } = Discord;
+    row = new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setCustomId('vote1')
+            .setLabel('VOTE')
+            .setStyle('SUCCESS')
+            .setEmoji('1️⃣'),
+        ).addComponents(
+          new MessageButton()
+            .setCustomId('vote2')
+            .setLabel('VOTE')
+            .setStyle('SUCCESS')
+            .setEmoji('2️⃣'),
+        ).addComponents(
+          new MessageButton()
+            .setCustomId('vote3')
+            .setLabel('VOTE')
+            .setStyle('SUCCESS')
+            .setEmoji('3️⃣'),
+        );
+    const votePingEmbed = new MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!\n\nKlikni na tlačítka dole a vygeneruj si tak\nspeciální odkaz jen pro sebe, který ti automaticky\nvyplní herní přezdívku do pole.")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
-    votePingChannel.send({ content: `<@&932655587861364776>\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>\n<http://l.surocraft.eu/vote3>`, embeds: [votePingEmbed] });
+    votePingChannel.send({ content: `<@&932655587861364776>`, embeds: [votePingEmbed], components: [row] });
 });
 
 //Bot login

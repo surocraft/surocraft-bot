@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
     return message.reply({ content: `**Nejsi STAFF pro použití tohoto příkazu.**` });
   }
 
-  const row = new MessageActionRow()
+  let row = new MessageActionRow()
     .addComponents(
       new MessageButton()
         .setCustomId('pushVote')
@@ -33,11 +33,11 @@ module.exports.run = async (bot, message, args) => {
   const votePingEmbedNoMention = new MessageEmbed()
     .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
     .setTitle("Je čas hlasovat! 🔔")
-    .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+    .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!\n\nKlikni na tlačítka dole a vygeneruj si tak\nspeciální odkaz jen pro sebe, který ti automaticky\nvyplní herní přezdívku do pole.")
     .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
     .setColor(config.embeds.color);
   const msg2 = await message.channel.send({ content: "*Náhled notifikace:*" });
-  const msg3 = await message.channel.send({ content: `@MENTION\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>`, embeds: [votePingEmbedNoMention] });
+  const msg3 = await message.channel.send({ content: `@MENTION`, embeds: [votePingEmbedNoMention] });
 
   const filter = i => i.customId === 'pushVote' && i.user.id === message.author.id;
 
@@ -50,14 +50,35 @@ module.exports.run = async (bot, message, args) => {
       msg2.delete();
       msg3.delete();
 
+      row = new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setCustomId('vote1')
+            .setLabel('VOTE')
+            .setStyle('SUCCESS')
+            .setEmoji('1️⃣'),
+        ).addComponents(
+          new MessageButton()
+            .setCustomId('vote2')
+            .setLabel('VOTE')
+            .setStyle('SUCCESS')
+            .setEmoji('2️⃣'),
+        ).addComponents(
+          new MessageButton()
+            .setCustomId('vote3')
+            .setLabel('VOTE')
+            .setStyle('SUCCESS')
+            .setEmoji('3️⃣'),
+        );
+
       const votePingChannel = bot.channels.cache.get('921803832667832380');
       const votePingEmbed = new MessageEmbed()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!\n\nKlikni na tlačítka dole a vygeneruj si tak\nspeciální odkaz jen pro sebe, který ti automaticky\nvyplní herní přezdívku do pole.")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
-      const notifikace = await votePingChannel.send({ content: `<@&932655587861364776>\n<http://l.surocraft.eu/vote1>\n<http://l.surocraft.eu/vote2>`, embeds: [votePingEmbed] });
+      const notifikace = await votePingChannel.send({ content: `<@&932655587861364776>`, embeds: [votePingEmbed], components: [row] });
 
       await msg1.edit({ content: `> **Notifikace byla úspěšně odeslána!**\n**Kanál:** <#${notifikace.channelId}>\n**Zpráva:** ${notifikace.url}`, components: [] });
     }
