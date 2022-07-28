@@ -16,6 +16,17 @@ module.exports = async (bot, interaction) => {
 
     if (i.isButton()) {
         nickname = i.member.displayName;
+        if (i.customId === "vote") {
+            c =
+            `**Hlasování pro SuroCraft:**\nVygenerováno pro: **\`${nickname}\`**
+
+            > :one: <https://minecraftpocket-servers.com/server/113005/vote?username=${nickname}>
+            > :two: <https://minecraft-mp.com/server/300411/vote?username=${nickname}>
+            > :three: <https://www.wablio.com/server/33/vote?nickname=${nickname}>
+            `;
+            return i.reply({ content: c, ephemeral: true });
+        }
+
         if (i.customId === "vote1") {
             const voteEmbed = new Discord.MessageEmbed()
                 .setTitle(`:one: Hlasovat`)
