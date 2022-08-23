@@ -18,7 +18,7 @@ module.exports = {
         ip: 'mc.surocraft.eu', //IP of your server - do not include port - e.g. "mc.hypixel.net"
         port: '25565', //PORT of your server - empty => default port (BE 19132, JA 25565)
         icon: 'https://i.imgur.com/Bp1BC8k.png', //Link to icon - like "https://website.com/icon.png"
-        version: '1.18.', //Minecraft version of sever
+        version: '1.7.x - 1.19.x', //Minecraft version of sever
         vote: 'https://minecraftpocket-servers.com/server/113005/vote' //Vote link - like "https://minecraftpocket-servers.com/server/80103/vote/"
     },
 
@@ -165,7 +165,7 @@ module.exports = {
             ],
             text: { //Custom text settings (for translating or customization)
                 title: "{serverName} verze:",
-                description: "Java {serverVersion}\nBedrock 1.19.*"
+                description: "> **Java:** `1.7.x` - `1.19.x` (`1.17`+ doporučeno)\n> **Bedrock:** `1.19.x`"
             }
         },
         vote: {
