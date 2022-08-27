@@ -1,6 +1,7 @@
 const chalk = require('chalk'),
     util = require('minecraft-server-util'),
     Discord = require('discord.js'),
+    at = Discord.ActivityType,
     db = require('quick.db'),
     ms = require('ms'),
     gr = chalk.green.bold,
@@ -17,7 +18,7 @@ module.exports = async (bot) => {
     if (bot.pres) {
         let presence = config.bot.presence,
             status = config.bot.status.toLowerCase(),
-            activity = config.bot.activity.toUpperCase();
+            activity = config.bot.activity.charAt(0).toUpperCase() + config.bot.activity.slice(1).toLowerCase();
         if (bot.pres.includes("{onlinePlayers}") | bot.pres.includes("{maxPlayers}")) {
             async function autoUpdatingPresence() { //autoUpdatingPresence loop for refreshing bot presence and status
                 let errored = false,
@@ -27,14 +28,14 @@ module.exports = async (bot) => {
                     try {
                         result = await util.status(server.ip, server.port);
                     } catch (err) {
-                        console.log();
+                        if (debug) console.log(err);
                         errored = true;
                     }
                 } else {
                     try {
                         result = await util.statusBedrock(server.ip, server.port);
                     } catch (err) {
-                        console.log();
+                        if (debug) console.log(err);
                         errored = true;
                     }
                 };
@@ -49,24 +50,23 @@ module.exports = async (bot) => {
                     };
 
                     try {
-                        await bot.user.setPresence({ activities: [{ name: presence, type: activity }], status: status, afk: false }); //Sets bot activity
-                        if (debug) console.log(`${bot.emotes.success} Successfully set presence to ` + gr(`${bot.activity.toLowerCase()} ${presence}`));
+                        await bot.user.setPresence({ activities: [{ name: presence, type: at[activity] }], status: status, afk: false }); //Sets bot activity
+                        if (debug) console.log(`${bot.emotes.success} Successfully set presence to ` + gr(`${activity} ${presence}`));
                     } catch (e) {
-                        console.log();
+                        if (debug) console.log(e);
                     }
                 } else {
-                    const presence = "Offline";
+                    const presence = config.autoStatus.offline;
                     try {
-                        await bot.user.setPresence({ activities: [{ name: presence, type: activity }], status: status, afk: false }); //Sets bot activity
-                        if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Presence set to ') + gr(`${bot.activity.toLowerCase()} ${presence}`));
+                        await bot.user.setPresence({ activities: [{ name: presence, type: at[activity] }], status: status, afk: false }); //Sets bot activity
+                        if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Presence set to ') + gr(`${activity} ${presence}`));
                     } catch (e) {
-                        console.log();
+                        if (debug) console.log(e);
                     }
                 }
                 presence = config.bot.presence;
                 setTimeout(autoUpdatingPresence, ms(config.autoStatus.time));
             }
-
             autoUpdatingPresence();
         } else {
             try {
@@ -78,30 +78,77 @@ module.exports = async (bot) => {
         }
     }
 
+    if (config.settings.countingCH) {
+        async function countingCH() { //countingCH loop for refreshing voice channel name
+            let name = config.countingCH.name,
+                errored = false,
+                result = undefined;
+
+            if (server.type === 'java') {
+                try {
+                    result = await util.status(server.ip, server.port);
+                } catch (err) {
+                    if (debug) console.log(err);
+                    errored = true;
+                }
+            } else {
+                try {
+                    result = await util.statusBedrock(server.ip, server.port);
+                } catch (err) {
+                    if (debug) console.log(err);
+                    errored = true;
+                }
+            };
+
+            if (!errored) {
+                name = name
+                    .replaceAll("{onlinePlayers}", result.players.online)
+                    .replaceAll("{maxPlayers}", result.players.max);
+
+                try {
+                    channel = await bot.channels.cache.get(config.countingCH.channelID)
+                    await channel.setName(name); //Sets channel name
+                    if (debug) console.log(`${bot.emotes.success} Successfully set channel name to ` + gr(name));
+                } catch (e) {
+                    if (debug) console.log(e);
+                }
+            } else {
+                name = config.countingCH.offline;
+                try {
+                    channel = await bot.channels.cache.get(config.countingCH.channelID)
+                    await channel.setName(name); //Sets channel name
+                    if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Channel name has been set to ') + gr(name));
+                } catch (e) {
+                    if (debug) console.log(e);
+                }
+            }
+            setTimeout(countingCH, ms(config.countingCH.time));
+        }
+        countingCH();
+    }
+
     if (config.settings.votingCH) {
-        const guild = bot.guilds.cache.get(config.votingCH.guild.id);
-        const channel = guild.channels.cache.get(config.votingCH.channel.id);
+        const channel = bot.channels.cache.get(config.votingCH.channelID);
         console.log(`${bot.emotes.success} Channel ${gr(channel.name)} is now set as voting channel!`);
     }
 
     if (config.settings.statusCH && server.work) {
-        const guild = bot.guilds.cache.get(info.guild.id);
-        const channel = guild.channels.cache.get(info.channel.id);
+        const channel = bot.channels.cache.get(info.channelID);
         const icon = server.icon ? server.icon : guild.iconURL();
 
         if (!db.get('statusCHMsgID')) {
             let msg;
             try {
-                const serverEmbed = new Discord.MessageEmbed()
+                const serverEmbed = new Discord.EmbedBuilder()
                     .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                     .setDescription(`🔄 **SETTING...**`)
-                    .addFields(
+                    .addFields([
                         { name: "PLAYERS", value: `�/�`, inline: false },
                         { name: "INFO", value: `${config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1)} �\n\`${server.ip}\`:\`${server.port}\``, inline: true }
-                    )
+                    ])
                     .setColor(config.embeds.color);
                 msg = await channel.send({ embeds: [serverEmbed] });
-            } catch (err) { console.log(err); }
+            } catch (err) { if (debug) console.log(err); }
 
             console.log(`${bot.emotes.success} Successfully sent status message to ${gr(channel.name)}!`);
             db.set('statusCHMsgID', msg.id);
@@ -154,7 +201,7 @@ module.exports = async (bot) => {
 
                     const trueList = result.players.sample ? "\n\`\`\`" + result.players.sample.map(p => ` ${p.name} `).join('\r\n') + "\`\`\`" : "";
 
-                    const serverEmbed = new Discord.MessageEmbed()
+                    const serverEmbed = new Discord.EmbedBuilder()
                         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                         .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                         .addFields(
@@ -167,7 +214,7 @@ module.exports = async (bot) => {
                     msg.edit({ embeds: [serverEmbed] });
                 })
                 .catch((error) => {
-                    const errorEmbed = new Discord.MessageEmbed()
+                    const errorEmbed = new Discord.EmbedBuilder()
                         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                         .setDescription(':x: **OFFLINE**')
                         .setColor(config.embeds.error)
@@ -217,7 +264,7 @@ module.exports = async (bot) => {
 
                     const version = versionAdvanced ? versionAdvanced.charAt(0).toUpperCase() + versionAdvanced.slice(1) : versionOriginal;
 
-                    const serverEmbed = new Discord.MessageEmbed()
+                    const serverEmbed = new Discord.EmbedBuilder()
                         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                         .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                         .addFields(
@@ -230,7 +277,7 @@ module.exports = async (bot) => {
                     msg.edit({ embeds: [serverEmbed] });
                 })
                 .catch((error) => {
-                    const errorEmbed = new Discord.MessageEmbed()
+                    const errorEmbed = new Discord.EmbedBuilder()
                         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                         .setDescription(':x: **OFFLINE**')
                         .setColor(config.embeds.error)
@@ -242,7 +289,7 @@ module.exports = async (bot) => {
                 });
         }
 
-        console.log(`${bot.emotes.success} Successfully updated status message in ${gr(channel.name)}!`);
+        if (debug) console.log(`${bot.emotes.success} Successfully updated status message in ${gr(channel.name)}!`);
 
         if (server.type === 'java') {
             setInterval(() =>
@@ -287,7 +334,7 @@ module.exports = async (bot) => {
 
                         const trueList = result.players.sample ? "\n\`\`\`" + result.players.sample.map(p => ` ${p.name} `).join('\r\n') + "\`\`\`" : "";
 
-                        const serverEmbed = new Discord.MessageEmbed()
+                        const serverEmbed = new Discord.EmbedBuilder()
                             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                             .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                             .addFields(
@@ -300,7 +347,7 @@ module.exports = async (bot) => {
                         msg.edit({ embeds: [serverEmbed] });
                     })
                     .catch((error) => {
-                        const errorEmbed = new Discord.MessageEmbed()
+                        const errorEmbed = new Discord.EmbedBuilder()
                             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                             .setDescription(':x: **OFFLINE**')
                             .setColor(config.embeds.error)
@@ -351,7 +398,7 @@ module.exports = async (bot) => {
 
                         const version = versionAdvanced ? versionAdvanced.charAt(0).toUpperCase() + versionAdvanced.slice(1) : versionOriginal;
 
-                        const serverEmbed = new Discord.MessageEmbed()
+                        const serverEmbed = new Discord.EmbedBuilder()
                             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                             .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                             .addFields(
@@ -364,7 +411,7 @@ module.exports = async (bot) => {
                         msg.edit({ embeds: [serverEmbed] });
                     })
                     .catch((error) => {
-                        const errorEmbed = new Discord.MessageEmbed()
+                        const errorEmbed = new Discord.EmbedBuilder()
                             .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
                             .setDescription(':x: **OFFLINE**')
                             .setColor(config.embeds.error)
@@ -383,7 +430,7 @@ module.exports = async (bot) => {
             util.status(server.ip, server.port)
                 .then((result) => {
                     console.log(`${bot.emotes.success} Successfully located ${gr(server.type.toUpperCase())} server ${gr(server.ip)}!\n` + "   " + gr('Server info:\n')
-                        + "   " + bold('IP:	 ') + bl(`${server.ip}:${result.port ? result.port : server.port}\n`)
+                        + "   " + bold('IP:	    ') + bl(`${server.ip}:${result.port ? result.port : server.port}\n`)
                         + "   " + bold('VERSION: ') + bl(`${result.version.name ? result.version.name : 'unknown'}\n`)
                         + "   " + bold('PLAYERS: ') + bl(`${result.players.online ? result.players.online : '0'}` + '/' + `${result.players.max ? result.players.max : '0'}`)
                     );
@@ -395,7 +442,7 @@ module.exports = async (bot) => {
             util.statusBedrock(server.ip, server.port)
                 .then((result) => {
                     console.log(`${bot.emotes.success} Successfully located ${gr(server.type.toUpperCase())} server ${gr(server.ip)}!\n` + "   " + gr('Server info:\n')
-                        + "   " + bold('IP:	 ') + bl(`${server.ip}:${result.port ? result.port : server.port}\n`)
+                        + "   " + bold('IP:	    ') + bl(`${server.ip}:${result.port ? result.port : server.port}\n`)
                         + "   " + bold('VERSION: ') + bl(`${result.version.name ? result.version.name : 'unknown'}\n`)
                         + "   " + bold('PLAYERS: ') + bl(`${result.players.online ? result.players.online : '0'}` + '/' + `${result.players.max ? result.players.max : '0'}`)
                     );

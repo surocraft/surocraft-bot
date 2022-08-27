@@ -5,5 +5,4 @@ package-lock.json
 .env
 json.sqlite
 
-bitfield.js
 commands/admin.js

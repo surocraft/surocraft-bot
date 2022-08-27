@@ -31,40 +31,45 @@ module.exports = {
         readyScan: true, //On bot's start, send to console server's basic info?
         split: true, //Advanced - Extract only the version like "1.17" or "1.12" etc.
         randomColor: false, //Enable random hex color generator for embeds? Overwrites embeds settings!
-        statusCH: true, //Enable auto-changing status message
-        votingCH: true //Enable voting channel
+        statusCH: true, //Enable auto-changing status message?
+        votingCH: true, //Enable voting channel?
+        countingCH: false //Enable counting channel?
     },
 
     //Period of auto changing status if you are using {onlinePlayers} or {maxPlayers} in bot's status
     autoStatus: {
-        time: '10s'
-    },
-
-    //Voting channel - https://docs.petyxbron.cz/config/config-info#voting-ch
-    votingCH: {
-        time: '30s', //Time for how long the cancel reaction should be deleted.
-        reactions: {
-            first: '👍', //First added reaction (the positive one)
-            second: '👎', //Second added reacion (the negative one)
-            cancel: '❌' //Third added reaction (cancel/remove button)
-        },
-        guild: {
-            id: '812280438490923048'
-        },
-        channel: {
-            id: '862805837465780225'
-        }
+        time: '10s', //Period of auto changing status - like "3min", "20s" or "1min" etc.
+        offline: 'Offline' //Changes bot's presence to this text if the server is offline / not found
     },
 
     //Auto changing status message
     statusCH: {
-        time: '10s', //How long should the status always be updated? - like "3min", "20s" or "1min" etc.
-        guild: {
-            id: '812280438490923048',
+        channelID: "862039798267904030",
+        time: '10s' //How long should the status always be updated? - like "3min", "20s" or "1min" etc.
+    },
+
+    //Voting channel - https://docs.petyxbron.cz/config/config-info#voting-ch
+    votingCH: {
+        channelID: "862805837465780225",
+        time: '30s', //Time for how long the cancel reaction should be deleted.
+        threads: {
+            enable: true, //Create discussion threads for each votingCH message
+            nameSyntax: "Návrh {ID}", //Thread name ("{ID}" = ID of voting/suggestion)
+            archiveTime: 1440 //Minutes after which the thread should archive in case of no recent activity
         },
-        channel: {
-            id: '862039798267904030',
+        reactions: {
+            first: '👍', //First added reaction (the positive one)
+            second: '👎', //Second added reacion (the negative one)
+            cancel: '❌' //Third added reaction (cancel/remove button)
         }
+    },
+
+    //Counting channel - auto updating channel name
+    countingCH: {
+        channelID: "",
+        time: '1min', //Period of updating channel name - like "3min", "20s" or "1min" etc.
+        name: "{onlinePlayers} players online!", //Name of the channel
+        offline: "Server is offline!" //Name of the channel if the server is offline / not found
     },
 
     //Embeds settings
