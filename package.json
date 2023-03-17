@@ -1,7 +1,7 @@
 {
   "name": "surocraft-bot",
-  "version": "2.4.1",
-  "description": "Discord Minecraft bot for SuroCraft server",
+  "version": "2.4.8",
+  "description": "Discord Minecraft bot for SuroCraft",
   "main": "index.js",
   "scripts": {
     "first": "npm i & node index.js",
@@ -9,28 +9,30 @@
     "start": "node index.js"
   },
   "author": "PetyXbron",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/surocraft/surocraft-bot.git"
   },
   "dependencies": {
-    "@discordjs/rest": "^1.1.0",
-    "axios": "^0.27.2",
+    "@discordjs/rest": "^1.6.0",
+    "axios": "^1.3.4",
     "chalk": "4.1.2",
-    "discord-api-types": "^0.37.4",
+    "discord-api-types": "^0.37.36",
     "discord-timestamp": "^1.0.2",
-    "discord.js": "^14.3.0",
-    "dotenv": "^16.0.0",
+    "discord.js": "^14.8.0",
+    "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "minecraft-motd-util": "^1.1.12",
-    "minecraft-server-util": "^5.2.10",
+    "minecraft-server-util": "^5.4.0",
     "ms": "^2.1.3",
-    "node-schedule": "^2.1.0",
-    "quick.db": "7.1.3"
+    "node-schedule": "^2.1.1"
   },
   "bugs": {
     "url": "https://github.com/surocraft/surocraft-bot/issues"
   },
-  "homepage": "https://github.com/surocraft/surocraft-bot#readme"
+  "homepage": "https://github.com/surocraft/surocraft-bot#readme",
+  "engines": {
+    "node": ">=16.9.0"
+  }
 }

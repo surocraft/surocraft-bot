@@ -3,6 +3,6 @@ package-lock.json
 .vscode/settings.json
 
 .env
-json.sqlite
+data.json
 
 commands/admin.js

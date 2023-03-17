@@ -1,8 +1,8 @@
-const Discord = require('discord.js');
-const ms = require('ms');
-const { MessageActionRow, MessageButton, MessageEmbed } = Discord;
-const fs = require('fs');
-const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
+const Discord = require('discord.js'),
+  ms = require('ms'),
+  { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = Discord,
+  fs = require('fs'),
+  { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
   name: "pushvote", //Name of command - RENAME THE FILE TOO!!!
@@ -18,30 +18,30 @@ module.exports.run = async (bot, message, args) => {
     return message.reply({ content: `**Nejsi STAFF pro použití tohoto příkazu.**` });
   }
 
-  let row = new MessageActionRow()
+  let row = new ActionRowBuilder()
     .addComponents(
-      new MessageButton()
+      new ButtonBuilder()
         .setCustomId('pushVote')
         .setLabel('Odeslat')
-        .setStyle('DANGER')
+        .setStyle(ButtonStyle.Danger)
         .setEmoji('✉️'),
     );
 
 
   const msg1 = await message.reply({ content: `> **Jsi si jistý, že chceš odeslat notifikaci k hlasování do <#921803832667832380> a zmínit roli?**\nMáš 30 vteřin na odpověď.`, components: [row] });
 
-  const testRow = new MessageActionRow()
+  const testRow = new ActionRowBuilder()
     .addComponents(
-      new MessageButton()
+      new ButtonBuilder()
         .setCustomId('vote')
-        .setLabel('Vygenerovat hlasovací odkazy')
-        .setStyle('PRIMARY')
+        .setLabel('Hlasovat')
+        .setStyle(ButtonStyle.Primary)
         .setEmoji('🗳️'),
     );
-  const votePingEmbedNoMention = new MessageEmbed()
+  const votePingEmbedNoMention = new EmbedBuilder()
     .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
     .setTitle("Je čas hlasovat! 🔔")
-    .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+    .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://craftlist.org/surocraft#vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
     .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
     .setColor(config.embeds.color);
   const msg2 = await message.channel.send({ content: "*Náhled notifikace:*" });
@@ -58,20 +58,20 @@ module.exports.run = async (bot, message, args) => {
       msg2.delete();
       msg3.delete();
 
-      row = new MessageActionRow()
+      row = new ActionRowBuilder()
         .addComponents(
-          new MessageButton()
+          new ButtonBuilder()
             .setCustomId('vote')
-            .setLabel('Vygenerovat hlasovací odkazy')
-            .setStyle('PRIMARY')
+            .setLabel('Hlasovat')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('🗳️'),
         );
 
       const votePingChannel = bot.channels.cache.get('921803832667832380');
-      const votePingEmbed = new MessageEmbed()
+      const votePingEmbed = new EmbedBuilder()
         .setAuthor({ name: config.server.name ? config.server.name : bot.channels.cache.get('812280438490923048').name, iconURL: server.icon ? server.icon : bot.channels.cache.get('812280438490923048').icon })
         .setTitle("Je čas hlasovat! 🔔")
-        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://www.wablio.com/server/33/vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
+        .setDescription("*Právě je 17:00.*\n**Hlasovat můžeš na:**\n> :one: Hlavní stránce **__[zde](https://minecraftpocket-servers.com/server/113005/vote)__**\n> :two: Druhé stránce **__[zde](https://minecraft-mp.com/server/300411/vote)__** (získáš 1K navíc)\n> :three: Třetí stránce **__[zde](https://craftlist.org/surocraft#vote)__** (získáš 1K navíc)\n\nVíce o hlasování najdeš na __[wiki](https://wiki.surocraft.eu/#vote)__.\nNastav si připomínaček k hlasování __[zde](https://discord.com/channels/812280438490923048/870356969595228170/921812083916550214)__!")
         .setFooter({ text: 'Made by PetyXbron', iconURL: 'https://i.imgur.com/oq70O0t.png' })
         .setColor(config.embeds.color);
       const notifikace = await votePingChannel.send({ content: `<@&932655587861364776>`, embeds: [votePingEmbed], components: [row] });
@@ -83,12 +83,12 @@ module.exports.run = async (bot, message, args) => {
   collector.on('error', async () => {
     msg2.delete();
     msg3.delete();
-    const newRow = new MessageActionRow()
+    const newRow = new ActionRowBuilder()
       .addComponents(
-        new MessageButton()
+        new ButtonBuilder()
           .setCustomId('pushVote')
           .setLabel('Odeslat')
-          .setStyle('DANGER')
+          .setStyle(ButtonStyle.Danger)
           .setEmoji('✉️')
           .setDisabled(true),
       );
@@ -99,12 +99,12 @@ module.exports.run = async (bot, message, args) => {
     if (collected.size === 0) {
       msg2.delete();
       msg3.delete();
-      const newRow = new MessageActionRow()
+      const newRow = new ActionRowBuilder()
         .addComponents(
-          new MessageButton()
+          new ButtonBuilder()
             .setCustomId('pushVote')
             .setLabel('Odeslat')
-            .setStyle('DANGER')
+            .setStyle(ButtonStyle.Danger)
             .setEmoji('✉️')
             .setDisabled(true),
         );

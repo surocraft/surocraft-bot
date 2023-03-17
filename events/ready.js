@@ -2,7 +2,7 @@ const chalk = require('chalk'),
     util = require('minecraft-server-util'),
     Discord = require('discord.js'),
     at = Discord.ActivityType,
-    db = require('quick.db'),
+    fs = require('fs'),
     ms = require('ms'),
     gr = chalk.green.bold,
     bold = chalk.bold,
@@ -12,6 +12,7 @@ const chalk = require('chalk'),
 
 module.exports = async (bot) => {
     const { server, config, info, settings } = bot;
+    const guild = config.bot.guildID ? await bot.guilds.cache.get(config.bot.guildID) : null;
     const debug = config.settings.debug;
     var warns = config.settings.warns;
 
@@ -106,7 +107,7 @@ module.exports = async (bot) => {
                     .replaceAll("{maxPlayers}", result.players.max);
 
                 try {
-                    channel = await bot.channels.cache.get(config.countingCH.channelID)
+                    channel = await bot.channels.cache.get(config.countingCH.channelID);
                     await channel.setName(name); //Sets channel name
                     if (debug) console.log(`${bot.emotes.success} Successfully set channel name to ` + gr(name));
                 } catch (e) {
@@ -115,7 +116,7 @@ module.exports = async (bot) => {
             } else {
                 name = config.countingCH.offline;
                 try {
-                    channel = await bot.channels.cache.get(config.countingCH.channelID)
+                    channel = await bot.channels.cache.get(config.countingCH.channelID);
                     await channel.setName(name); //Sets channel name
                     if (debug) console.log(`${bot.emotes.warn} ` + warn('Server was not found! Channel name has been set to ') + gr(name));
                 } catch (e) {
@@ -135,26 +136,36 @@ module.exports = async (bot) => {
     if (config.settings.statusCH && server.work) {
         const channel = bot.channels.cache.get(info.channelID);
         const icon = server.icon ? server.icon : guild.iconURL();
+        const dataJSON = bot.dataJSON;
 
-        if (!db.get('statusCHMsgID')) {
+        if (!dataJSON["StatusCHMsgID"]) {
             let msg;
             try {
                 const serverEmbed = new Discord.EmbedBuilder()
-                    .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                    .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                     .setDescription(`🔄 **SETTING...**`)
                     .addFields([
                         { name: "PLAYERS", value: `�/�`, inline: false },
                         { name: "INFO", value: `${config.server.type.charAt(0).toUpperCase() + config.server.type.slice(1)} �\n\`${server.ip}\`:\`${server.port}\``, inline: true }
                     ])
                     .setColor(config.embeds.color);
-                msg = await channel.send({ embeds: [serverEmbed] });
-            } catch (err) { if (debug) console.log(err); }
+                try {
+                    msg = await channel.send({ embeds: [serverEmbed] });
+                } catch (err) {
+                    console.error("Could not sent status CH message! Error:\n" + err);
+                }
+            } catch (err) {
+                if (debug) console.log(err);
+            }
 
-            console.log(`${bot.emotes.success} Successfully sent status message to ${gr(channel.name)}!`);
-            db.set('statusCHMsgID', msg.id);
+            data = dataJSON;
+            data["StatusCHMsgID"] = msg.id;
+            fs.writeFile(bot.dev ? "./dev-data.json" : "./data.json", JSON.stringify(data, null, 2), err => {
+                if (err) console.log("Could not edit the data.json content! Error:\n" + err);
+            });
         }
 
-        msg = await channel.messages.fetch(db.get('statusCHMsgID'));
+        msg = await channel.messages.fetch(dataJSON["StatusCHMsgID"]);
         let
             ip1 = server.ip,
             port1 = server.port;
@@ -202,7 +213,7 @@ module.exports = async (bot) => {
                     const trueList = result.players.sample ? "\n\`\`\`" + result.players.sample.map(p => ` ${p.name} `).join('\r\n') + "\`\`\`" : "";
 
                     const serverEmbed = new Discord.EmbedBuilder()
-                        .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                        .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                         .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                         .addFields(
                             { name: "PLAYERS", value: `${result.players.online}/${result.players.max}` + trueList, inline: false },
@@ -211,16 +222,19 @@ module.exports = async (bot) => {
                         .setColor(config.embeds.color)
                         .setFooter({ text: 'Updated' })
                         .setTimestamp();
-                    msg.edit({ embeds: [serverEmbed] });
+                    try { msg.edit({ embeds: [serverEmbed] }); }
+                    catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
+
                 })
                 .catch((error) => {
                     const errorEmbed = new Discord.EmbedBuilder()
-                        .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                        .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                         .setDescription(':x: **OFFLINE**')
                         .setColor(config.embeds.error)
                         .setFooter({ text: 'Updated' })
                         .setTimestamp();
-                    msg.edit({ embeds: [errorEmbed] });
+                    try { msg.edit({ embeds: [errorEmbed] }); }
+                    catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
 
                     if (warns) console.log(`${bot.emotes.warn} ` + warn(`Error when posting status message! Error:\n`) + error);
                 });
@@ -265,7 +279,7 @@ module.exports = async (bot) => {
                     const version = versionAdvanced ? versionAdvanced.charAt(0).toUpperCase() + versionAdvanced.slice(1) : versionOriginal;
 
                     const serverEmbed = new Discord.EmbedBuilder()
-                        .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                        .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                         .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                         .addFields(
                             { name: "PLAYERS", value: `${result.players.online}/${result.players.max}`, inline: false },
@@ -274,16 +288,18 @@ module.exports = async (bot) => {
                         .setColor(config.embeds.color)
                         .setFooter({ text: 'Updated' })
                         .setTimestamp();
-                    msg.edit({ embeds: [serverEmbed] });
+                    try { msg.edit({ embeds: [serverEmbed] }); }
+                    catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
                 })
                 .catch((error) => {
                     const errorEmbed = new Discord.EmbedBuilder()
-                        .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                        .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                         .setDescription(':x: **OFFLINE**')
                         .setColor(config.embeds.error)
                         .setFooter({ text: 'Updated' })
                         .setTimestamp();
-                    msg.edit({ embeds: [errorEmbed] });
+                    try { msg.edit({ embeds: [errorEmbed] }); }
+                    catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
 
                     if (warns) console.log(`${bot.emotes.warn} ` + warn(`Error when posting status message! Error:\n`) + error);
                 });
@@ -335,7 +351,7 @@ module.exports = async (bot) => {
                         const trueList = result.players.sample ? "\n\`\`\`" + result.players.sample.map(p => ` ${p.name} `).join('\r\n') + "\`\`\`" : "";
 
                         const serverEmbed = new Discord.EmbedBuilder()
-                            .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                            .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                             .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                             .addFields(
                                 { name: "PLAYERS", value: `${result.players.online}/${result.players.max}` + trueList, inline: false },
@@ -344,16 +360,18 @@ module.exports = async (bot) => {
                             .setColor(config.embeds.color)
                             .setFooter({ text: 'Updated' })
                             .setTimestamp();
-                        msg.edit({ embeds: [serverEmbed] });
+                        try { msg.edit({ embeds: [serverEmbed] }); }
+                        catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
                     })
                     .catch((error) => {
                         const errorEmbed = new Discord.EmbedBuilder()
-                            .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                            .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                             .setDescription(':x: **OFFLINE**')
                             .setColor(config.embeds.error)
                             .setFooter({ text: 'Updated' })
                             .setTimestamp();
-                        msg.edit({ embeds: [errorEmbed] });
+                        try { msg.edit({ embeds: [errorEmbed] }); }
+                        catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
 
                         if (warns) console.log(`${bot.emotes.warn} ` + warn(`Error when posting status message! Error:\n`) + error);
                     }), ms(info.time));
@@ -399,7 +417,7 @@ module.exports = async (bot) => {
                         const version = versionAdvanced ? versionAdvanced.charAt(0).toUpperCase() + versionAdvanced.slice(1) : versionOriginal;
 
                         const serverEmbed = new Discord.EmbedBuilder()
-                            .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                            .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                             .setDescription(maintenceStatus ? ":construction_worker: **MAINTENANCE**" : ":white_check_mark: **ONLINE**")
                             .addFields(
                                 { name: "PLAYERS", value: `${result.players.online}/${result.players.max}`, inline: false },
@@ -408,16 +426,18 @@ module.exports = async (bot) => {
                             .setColor(config.embeds.color)
                             .setFooter({ text: 'Updated' })
                             .setTimestamp();
-                        msg.edit({ embeds: [serverEmbed] });
+                        try { msg.edit({ embeds: [serverEmbed] }); }
+                        catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
                     })
                     .catch((error) => {
                         const errorEmbed = new Discord.EmbedBuilder()
-                            .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
+                            .setAuthor({ name: config.server.name ? config.server.name : guild.name, iconURL: icon })
                             .setDescription(':x: **OFFLINE**')
                             .setColor(config.embeds.error)
                             .setFooter({ text: 'Updated' })
                             .setTimestamp();
-                        msg.edit({ embeds: [errorEmbed] });
+                        try { msg.edit({ embeds: [errorEmbed] }); }
+                        catch (err) { console.error("Could not edit the status CH message! Error:\n" + err); }
 
                         if (warns) console.log(`${bot.emotes.warn} ` + warn(`Error when posting status message! Error:\n`) + error);
                     }), ms(info.time));

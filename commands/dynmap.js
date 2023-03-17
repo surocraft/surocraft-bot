@@ -1,6 +1,6 @@
-const Discord = require('discord.js');
-const fs = require('fs');
-const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
+const Discord = require('discord.js'),
+    fs = require('fs'),
+    { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
     name: "dynmap", //Name of command - RENAME THE FILE TOO!!!
@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
     let icon = server.icon ? server.icon : message.guild.iconURL();
     let serverName = config.server.name ? config.server.name : message.guild.name;
 
-    const dynmapEmbed = new Discord.MessageEmbed()
+    const dynmapEmbed = new Discord.EmbedBuilder()
         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
         .setTitle("Mapa světa")
         .setDescription("SuroCraft DynMap světa najdeš na **__[map.surocraft.eu](https://map.surocraft.eu/)__**")

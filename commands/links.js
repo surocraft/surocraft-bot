@@ -1,6 +1,6 @@
-const Discord = require('discord.js');
-const fs = require('fs');
-const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
+const Discord = require('discord.js'),
+    fs = require('fs'),
+    { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
     name: "links", //Name of command - RENAME THE FILE TOO!!!
@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
     let icon = server.icon ? server.icon : message.guild.iconURL();
     let serverName = config.server.name ? config.server.name : message.guild.name;
 
-    const linksEmbed = new Discord.MessageEmbed()
+    const linksEmbed = new Discord.EmbedBuilder()
         .setAuthor({ name: config.server.name ? config.server.name : message.guild.name, iconURL: icon })
         .setTitle("Užitečné odkazy")
         .setDescription("Všechny užitečné odkazy najdeš na **__[surocraft.eu](http://surocraft.eu/)__**")

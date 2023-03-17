@@ -79,9 +79,9 @@ module.exports.run = async (bot, interaction) => {
             .setAuthor({ name: config.server.name ? config.server.name : interaction.guild.name, iconURL: icon })
             .setTitle(`${commandName.charAt(0).toUpperCase() + commandName.slice(1)} Command:`)
             .setDescription(`
-                > **Description:** ${!!command.config.description ? command.config.description : "Without description"}
-                > **Aliases:** ${!!command.config.aliases ? "`" + bot.prefix + command.config.aliases.join(`\`, \`${bot.prefix}`) + "`" : "No aliases"}
-            `)
+            > **Description:** ${!!command.config.description ? command.config.description : "Without description"}
+            > **Aliases:** ${!!command.config.aliases ? "`" + bot.prefix + command.config.aliases.join(`\`, \`${bot.prefix}`) + "`" : "No aliases"}
+        `)
             .setColor(config.embeds.color);
         return interaction.reply({ embeds: [helpEmbed] });
     } else {

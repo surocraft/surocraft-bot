@@ -1,8 +1,8 @@
-const Discord = require('discord.js');
-const Timestamp = require('discord-timestamp');
-const ms = require('ms');
-const fs = require('fs');
-const { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
+const Discord = require('discord.js'),
+  Timestamp = require('discord-timestamp'),
+  ms = require('ms'),
+  fs = require('fs'),
+  { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
   name: "ban", //Name of command - RENAME THE FILE TOO!!!
@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args) => {
     reason = args.slice(2).join(" ");
   }
 
-  const banEmbed = new Discord.MessageEmbed()
+  const banEmbed = new Discord.EmbedBuilder()
     .setTitle(player + " byl zabanován")
     .setDescription(`**Hráč:**⠀⠀**__\`${player}\`__**\n**Datum:**⠀<t:${Timestamp(Date.now())}:f>\n**Staff:**⠀⠀<@${message.author.id}>\n**Vyprší:**⠀${time ? `<t:${Timestamp(time)}:R>` : "`Nikdy`"}\n**Důvod:**⠀\`${reason}\``)
     .setColor(config.embeds.color);
