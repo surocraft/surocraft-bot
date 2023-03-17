@@ -16,6 +16,8 @@ module.exports = async (bot) => {
     const debug = config.settings.debug;
     var warns = config.settings.warns;
 
+    require("../sc-functions/checker")(bot);
+
     if (bot.pres) {
         let presence = config.bot.presence,
             status = config.bot.status.toLowerCase(),
@@ -160,7 +162,7 @@ module.exports = async (bot) => {
 
             data = dataJSON;
             data["StatusCHMsgID"] = msg.id;
-            fs.writeFile(bot.dev ? "./dev-data.json" : "./data.json", JSON.stringify(data, null, 2), err => {
+            fs.writeFile(bot.dev ? "./dev-data.json" : "./data.json", JSON.stringify(data, null, 4), err => {
                 if (err) console.log("Could not edit the data.json content! Error:\n" + err);
             });
         }

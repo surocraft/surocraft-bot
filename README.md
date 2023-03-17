@@ -6,7 +6,7 @@ The content of most strings is in the Czech language.
 
 **This repository is not made for any other users.**
 **If you want to have your own cool Minecraft Discord bot, look at the original project [here](https://github.com/PetyXbron/minecraft-bot).**
-This version of [minecraft-bot project](https://github.com/PetyXbron/minecraft-bot), called [surocraft-bot](https://github.com/surocraft/surocraft-bot) is modified as the original project offers. Modified config, added new commands, custom README.md file, modified Discord.js events and index.js file to personally improve the interaction with the SuroCraft.
+This version of [minecraft-bot project](https://github.com/PetyXbron/minecraft-bot), called [surocraft-bot](https://github.com/surocraft/surocraft-bot) is modified as the original project offers. Modified config, added new commands, edited README.md file, modified Discord.js events and index.js file to personally improve the interaction with the SuroCraft. Also installed new dependencies to support custom features.
 
 **If you need some help with my projects, please visit [our Discord server](https://discord.com/invite/PYTqqhWad2).**<br />
 [![Azator Entertainment Discord banner](https://discordapp.com/api/guilds/789494558538858547/widget.png?style=banner2)](https://discord.com/invite/PYTqqhWad2)

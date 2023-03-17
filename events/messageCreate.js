@@ -1,5 +1,5 @@
 const ms = require('ms'),
-    version = require('../package.json').version,
+    package = require('../package.json'),
     fs = require('fs');
 
 module.exports = async (bot, message) => {
@@ -19,7 +19,7 @@ module.exports = async (bot, message) => {
             data = dataJSON;
             data[`date-hraciRolePing_${message.author.id}`] = Date.now();
 
-            fs.writeFile(bot.dev ? './dev-data.json' : './data.json', JSON.stringify(data, null, 2), err => {
+            fs.writeFile(bot.dev ? './dev-data.json' : './data.json', JSON.stringify(data, null, 4), err => {
                 if (err) console.log("Could not edit the data.json content! Error:\n" + err);
             });
 
@@ -62,7 +62,7 @@ module.exports = async (bot, message) => {
                     data = dataJSON;
                     data["VotingCHLastID"] = newID;
 
-                    fs.writeFile(bot.dev ? './dev-data.json' : './data.json', JSON.stringify(data, null, 2), err => {
+                    fs.writeFile(bot.dev ? './dev-data.json' : './data.json', JSON.stringify(data, null, 4), err => {
                         if (err) console.log("Could not edit the data.json content! Error:\n" + err);
                     });
                 }
@@ -72,10 +72,10 @@ module.exports = async (bot, message) => {
 
     if (!config.commands.enableNormals) return;
 
-    if (message.content.includes(`minecraft-bot version`)) {
+    if (message.content.includes(`minecraft-bot version`) || message.content.includes(`surocraft-bot version`)) {
         message.channel.sendTyping();
         setTimeout(function () {
-            message.channel.send({ content: version });
+            message.channel.send({ content: `> **surocraft-bot:** \`${package.version}\`\n> **minecraft-bot:** \`${package.forkedVersion}\`` });
         }, ms('1s'));
         return;
     }
