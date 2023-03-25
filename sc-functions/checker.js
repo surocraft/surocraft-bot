@@ -18,17 +18,53 @@ module.exports = async (bot) => {
                 const banChannel = bot.channels.cache.get('890958568935788575');
                 const banMsg = await banChannel.messages.fetch(ban.msg);
 
+                typ = ban.type;
+                let typArr = new Array();
+                if (typ === 0) {
+                    typArr[0] = { name: "Minecraft Ban", iconURL: "https://i.imgur.com/e6Q03xu.png" };
+                    typArr[1] = player + " - zabanován/a";
+                    typArr[2] = player + " - ban odebrán";
+                    typArr[3] = player + " - ban vypršel";
+                    typArr[4] = "**Odebrán:**⠀";
+                } else if (typ === 1) {
+                    typArr[0] = { name: "Minecraft Mute", iconURL: "https://i.imgur.com/e6Q03xu.png" };
+                    typArr[1] = player + " - ztlumen/a";
+                    typArr[2] = player + " - mute zrušen";
+                    typArr[3] = player + " - mute vypršel";
+                    typArr[4] = "**Zrušen:**⠀⠀";
+                } else if (typ === 2) {
+                    typArr[0] = { name: "Discord Mute", iconURL: "https://i.imgur.com/vxLeVVm.png" };
+                    typArr[1] = player + " - ztlumen/a";
+                    typArr[2] = player + " - mute zrušen";
+                    typArr[3] = player + " - mute vypršel";
+                    typArr[4] = "**Zrušen:**⠀⠀";
+                } else if (typ === 3) {
+                    typArr[0] = { name: "Discord Ban", iconURL: "https://i.imgur.com/vxLeVVm.png" };
+                    typArr[1] = player + " - zabanován/a";
+                    typArr[2] = player + " - ban odebrán";
+                    typArr[3] = player + " - ban vypršel";
+                    typArr[4] = "**Odebrán:**⠀";
+                }
+
                 dateT = Math.floor(ban.date.getTime() / 1000);
                 expiresT = Math.floor(ban.expires.getTime() / 1000);
 
+                let staffMentions = new Array();
+                ban.staff.forEach((e, i) => {
+                    staffMentions[i] = `<@${e}>`;
+                });
+
                 const banEmbed = new Discord.EmbedBuilder()
-                    .setTitle(ban.name + " - ban vypršel")
+                    .setAuthor(typArr[0])
+                    .setTitle(typArr[3])
                     .setDescription(`
-                    **Hráč:**⠀⠀⠀**__\`${ban.name}\`__**
-                    **Datum:**⠀⠀<t:${dateT}:f> (<t:${dateT}:R>)
-                    **Staff:**⠀⠀⠀<@${ban.staff}>
-                    **Vypršel:**⠀<t:${expiresT}:R> (<t:${expiresT}:f>)
-                    **Důvod:**⠀⠀\`${ban.reason}\`
+                    > **Hráč:**⠀⠀⠀**__\`${ban.name}\`__**
+                    > **Datum:**⠀⠀<t:${dateT}:f>
+                    > ⠀⠀⠀⠀⠀⠀⠀(<t:${dateT}:R>)
+                    > **Staff:**⠀⠀⠀${staffMentions.join(", ")}
+                    > **Vypršel:**⠀<t:${expiresT}:f>
+                    > ⠀⠀⠀⠀⠀⠀⠀(<t:${expiresT}:R>)
+                    > **Důvod:**⠀⠀\`${ban.reason}\`
                     `)
                     .setColor(colors[1])
                     .setFooter({ text: 'Aktualizováno' })
