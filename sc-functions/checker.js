@@ -26,24 +26,28 @@ module.exports = async (bot) => {
                     typArr[2] = player + " - ban odebrán";
                     typArr[3] = player + " - ban vypršel";
                     typArr[4] = "**Odebrán:**⠀";
+                    typArr[5] = "**Původně:**⠀";
                 } else if (typ === 1) {
                     typArr[0] = { name: "Minecraft Mute", iconURL: "https://i.imgur.com/e6Q03xu.png" };
                     typArr[1] = player + " - ztlumen/a";
                     typArr[2] = player + " - mute zrušen";
                     typArr[3] = player + " - mute vypršel";
                     typArr[4] = "**Zrušen:**⠀⠀";
+                    typArr[5] = "**Původně:**⠀";
                 } else if (typ === 2) {
                     typArr[0] = { name: "Discord Mute", iconURL: "https://i.imgur.com/vxLeVVm.png" };
                     typArr[1] = player + " - ztlumen/a";
                     typArr[2] = player + " - mute zrušen";
                     typArr[3] = player + " - mute vypršel";
                     typArr[4] = "**Zrušen:**⠀⠀";
+                    typArr[5] = "**Původně:**⠀";
                 } else if (typ === 3) {
                     typArr[0] = { name: "Discord Ban", iconURL: "https://i.imgur.com/vxLeVVm.png" };
                     typArr[1] = player + " - zabanován/a";
                     typArr[2] = player + " - ban odebrán";
                     typArr[3] = player + " - ban vypršel";
                     typArr[4] = "**Odebrán:**⠀";
+                    typArr[5] = "**Původně:**⠀";
                 }
 
                 dateT = Math.floor(ban.date.getTime() / 1000);
@@ -80,6 +84,6 @@ module.exports = async (bot) => {
             }
         });
 
-        setTimeout(checkBannedPlayers, ms("2s"));
+        setTimeout(checkBannedPlayers, ms("1min"));
     }
 };

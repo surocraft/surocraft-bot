@@ -20,8 +20,8 @@ module.exports = {
                         .setRequired(true)
                         .addChoices(
                             { name: 'Discord Ban', value: "3" },
-                            { name: 'Discord Mute', value: "1" },
-                            { name: 'Minecraft Mute', value: "2" },
+                            { name: 'Discord Mute', value: "2" },
+                            { name: 'Minecraft Mute', value: "1" },
                             { name: 'Minecraft Ban', value: "0" }
                         ))
                 .addStringOption(option =>
@@ -41,14 +41,14 @@ module.exports = {
                         .setDescription('Zadej důvod banu')
                         .setRequired(true)
                 )
-                .addStringOption(option =>
-                    option.setName('datum')
-                        .setDescription('Zadej čas banu')
-                        .setRequired(false)
-                )
                 .addUserOption(option =>
                     option.setName('staff')
                         .setDescription('Zadej staff')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option.setName('datum')
+                        .setDescription('Zadej čas banu')
                         .setRequired(false)
                 )
         )
@@ -62,8 +62,8 @@ module.exports = {
                         .setRequired(true)
                         .addChoices(
                             { name: 'Discord Ban', value: "3" },
-                            { name: 'Discord Mute', value: "1" },
-                            { name: 'Minecraft Mute', value: "2" },
+                            { name: 'Discord Mute', value: "2" },
+                            { name: 'Minecraft Mute', value: "1" },
                             { name: 'Minecraft Ban', value: "0" }
                         ))
                 .addStringOption(option =>
@@ -88,6 +88,21 @@ module.exports = {
                         .setDescription('Zadej staff')
                         .setRequired(false)
                 )
+                .addStringOption(option =>
+                    option.setName('datum')
+                        .setDescription('Zadej čas banu')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option.setName('novytyp')
+                        .setDescription('Vyber nový typ trestu')
+                        .setRequired(false)
+                        .addChoices(
+                            { name: 'Discord Ban', value: "3" },
+                            { name: 'Discord Mute', value: "2" },
+                            { name: 'Minecraft Mute', value: "1" },
+                            { name: 'Minecraft Ban', value: "0" }
+                        ))
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -134,31 +149,41 @@ module.exports.run = async (bot, interaction) => {
 
     player = interaction.options.getString('hráč');
     typ = parseInt(interaction.options.getString('typ'));
+    let novyTyp = undefined;
+    if (interaction.options._subcommand === "update") novyTyp = parseInt(interaction.options.getString('novytyp'));
     let typArr = new Array();
-    if (typ === 0) {
+    if (typ === 0 || novyTyp === 0) {
         typArr[0] = { name: "Minecraft Ban", iconURL: "https://i.imgur.com/e6Q03xu.png" };
         typArr[1] = player + " - zabanován/a";
         typArr[2] = player + " - ban odebrán";
         typArr[3] = player + " - ban vypršel";
         typArr[4] = "**Odebrán:**⠀";
-    } else if (typ === 1) {
+        typArr[5] = "**Původně:**⠀";
+        if (novyTyp) novyTypArr = typArr;
+    } else if (typ === 1 || novyTyp === 1) {
         typArr[0] = { name: "Minecraft Mute", iconURL: "https://i.imgur.com/e6Q03xu.png" };
         typArr[1] = player + " - ztlumen/a";
         typArr[2] = player + " - mute zrušen";
         typArr[3] = player + " - mute vypršel";
         typArr[4] = "**Zrušen:**⠀⠀";
-    } else if (typ === 2) {
+        typArr[5] = "**Původně:**⠀";
+        if (novyTyp) novyTypArr = typArr;
+    } else if (typ === 2 || novyTyp === 2) {
         typArr[0] = { name: "Discord Mute", iconURL: "https://i.imgur.com/vxLeVVm.png" };
         typArr[1] = player + " - ztlumen/a";
         typArr[2] = player + " - mute zrušen";
         typArr[3] = player + " - mute vypršel";
         typArr[4] = "**Zrušen:**⠀⠀";
-    } else if (typ === 3) {
+        typArr[5] = "**Původně:**⠀";
+        if (novyTyp) novyTypArr = typArr;
+    } else if (typ === 3 || novyTyp === 3) {
         typArr[0] = { name: "Discord Ban", iconURL: "https://i.imgur.com/vxLeVVm.png" };
         typArr[1] = player + " - zabanován/a";
         typArr[2] = player + " - ban odebrán";
         typArr[3] = player + " - ban vypršel";
         typArr[4] = "**Odebrán:**⠀";
+        typArr[5] = "**Původně:**⠀";
+        if (novyTyp) novyTypArr = typArr;
     }
 
     if (interaction.options._subcommand === "create") {
@@ -195,6 +220,7 @@ module.exports.run = async (bot, interaction) => {
             .setFooter({ text: 'Vytvořeno' })
             .setTimestamp();
         const banMsg = await banChannel.send({ content: "<@&921813279431614465> 🔔", embeds: [banEmbed] });
+        //Ban Role <@&921813279431614465>
 
         data = dataJSON;
         data.bannedPlayers.push({
@@ -211,21 +237,24 @@ module.exports.run = async (bot, interaction) => {
             if (err) console.log("Could not edit the data.json content! Error:\n" + err);
         });
 
-        if (interaction.channel === banChannel) return interaction.reply({ content: `**Ban zpráva byla odeslána!**`, ephemeral: true });
-        return interaction.reply({ content: `**Ban zpráva byla odeslána do <#890958568935788575>!**` });
+        if (interaction.channel === banChannel) return interaction.reply({ content: `**Ban zpráva byla odeslána!**\n> **Typ:** ${typArr[0].name}`, ephemeral: true });
+        return interaction.reply({ content: `**Ban zpráva byla odeslána do <#890958568935788575>!**\n> **Typ:** ${typArr[0].name}` });
     }
 
     if (interaction.options._subcommand === "update") {
         time = interaction.options.getString('doba');
         reason = interaction.options.getString('důvod');
+        datum = interaction.options.getString('datum');
         staffak = (interaction.options.getUser('staff') || interaction.member).id;
 
         ban = dataJSON.bannedPlayers.find(({ name, type }) => name.toLowerCase() === player.toLowerCase() && type === typ);
-        if (!ban || !time && !reason && !interaction.options.getUser('staff')) {
+        if (!ban || !novyTyp && !time && !reason && !datum && !interaction.options.getUser('staff')) {
             if (!time && !reason && !interaction.options.getUser('staff')) return interaction.reply({ content: `**Neuvedl jsi žádné změny k aktualizaci banu!**`, ephemeral: true });
             return interaction.reply({ content: `**Hráč \`${player}\` není uložen v Discord ban systému!**\n> **Hledaný typ:** ${typArr[0].name}`, ephemeral: true });
         } else {
             const banMsg = await banChannel.messages.fetch(ban.msg);
+
+            date = datum ? new Date(datum) : ban.date;
 
             let expireStamp;
             if (!time) {
@@ -250,20 +279,19 @@ module.exports.run = async (bot, interaction) => {
                 });
             }
             else {
+                ban.staff.push(staffak);
                 ban.staff.forEach((e, i) => {
                     staffMentions[i] = `<@${e}>`;
                 });
-                staffID.push(`<@${staffak}>`);
-                ban.staff.push(staffak);
             }
 
             const banEmbed = new Discord.EmbedBuilder()
-                .setAuthor(typArr[0])
-                .setTitle(typArr[1])
+                .setAuthor(novyTypArr[0] || typArr[0])
+                .setTitle(novyTypArr[1] || typArr[1])
                 .setDescription(`
                 > **Hráč:**⠀⠀⠀**__\`${player}\`__**
-                > **Datum:**⠀⠀<t:${Timestamp(ban.date)}:f>
-                > ⠀⠀⠀⠀⠀⠀⠀(<t:${Timestamp(ban.date)}:R>)
+                > **Datum:**⠀⠀<t:${Timestamp(date)}:f>
+                > ⠀⠀⠀⠀⠀⠀⠀(<t:${Timestamp(date)}:R>)
                 > **Staff:**⠀⠀⠀${staffMentions.join(", ")}
                 > **Vyprší:**⠀⠀${time ? `<t:${expireStamp}:f>\n> ⠀⠀⠀⠀⠀⠀⠀(<t:${expireStamp}:R>)` : "`Neurčeno`"}
                 > **Důvod:**⠀⠀\`${reason ? reason : ban.reason}\`
@@ -281,10 +309,10 @@ module.exports.run = async (bot, interaction) => {
             });
 
             data.bannedPlayers.push({
-                type: typ,
+                type: novyTyp || typ,
                 name: player,
                 msg: ban.msg,
-                date: ban.date,
+                date: date,
                 staff: ban.staff,
                 expires: time || 0,
                 reason: reason ? reason : ban.reason
@@ -311,6 +339,11 @@ module.exports.run = async (bot, interaction) => {
 
             const banMsg = await banChannel.messages.fetch(ban.msg);
 
+            if (ban.expires !== 0) {
+                time = ban.expires;
+                expireStamp = Math.floor(new Date(ban.expires).getTime() / 1000);
+            } else time = undefined;
+
             let staffMentions = new Array();
             if (ban.staff.includes(staffak)) {
                 ban.staff.forEach((e, i) => {
@@ -318,10 +351,10 @@ module.exports.run = async (bot, interaction) => {
                 });
             }
             else {
+                ban.staff.push(staffak);
                 ban.staff.forEach((e, i) => {
                     staffMentions[i] = `<@${e}>`;
                 });
-                staffID.push(`<@${staffak}>`);
             }
 
             const banEmbed = new Discord.EmbedBuilder()
@@ -332,6 +365,7 @@ module.exports.run = async (bot, interaction) => {
                 > **Datum:**⠀⠀<t:${Timestamp(ban.date)}:f>
                 > ⠀⠀⠀⠀⠀⠀⠀(<t:${Timestamp(ban.date)}:R>)
                 > **Staff:**⠀⠀⠀${staffMentions.join(", ")}
+                > ${typArr[5]}${time ? `<t:${expireStamp}:f>\n> ⠀⠀⠀⠀⠀⠀⠀(<t:${expireStamp}:R>)` : "`Neurčeno`"}
                 > ${typArr[4]}<t:${Timestamp(Date.now())}:f>
                 > ⠀⠀⠀⠀⠀⠀⠀(<t:${Timestamp(Date.now())}:R>)
                 > **Důvod:**⠀⠀\`${ban.reason}\`
