@@ -6,7 +6,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders'),
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('link') //Name of command - RENAME THE FILE TOO!!!
-        .setDescription('Pošle užitečné odkazy') //Description of command - you can change it :)
+        .setDescription('Užitečné odkazy') //Description of command - you can change it :)
         .addStringOption(option =>
             option.setName('link')
                 .setDescription('Vyber místo na odkázání')

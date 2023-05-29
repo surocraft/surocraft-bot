@@ -6,7 +6,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders'),
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('vote') //Name of command - RENAME THE FILE TOO!!!
-        .setDescription('Sends the link for voting on Minecraft server list') //Description of command - you can change it :)
+        .setDescription('Hlasovací odkaz pro hlasování') //Description of command - you can change it :)
 };
 
 module.exports.run = async (bot, interaction) => {

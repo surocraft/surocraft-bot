@@ -3,8 +3,7 @@ const Discord = require('discord.js'),
 
 module.exports = async (bot, interaction) => {
     const i = interaction;
-    const { server, config } = bot;
-    icon = server.icon ? server.icon : i.guild.iconURL();
+    const { config } = bot;
 
     if (interaction.type === InteractionType.MessageComponent) {
         nickname = i.member.displayName;

@@ -1,10 +1,10 @@
-const util = require('minecraft-server-util'),
+const util = require('axios'),
     fs = require('fs'),
     { commands } = require(fs.existsSync(__dirname + '/../dev-config.js') ? '../dev-config' : '../config');
 
 module.exports.config = {
     name: "test", //Name of command - RENAME THE FILE TOO!!!
-    description: "Test command", //Description of command - you can change it :)
+    description: "Zkouška, zkouška!", //Description of command - you can change it :)
     aliases: commands.test.aliases //Command's aliases - set them in config.js
 };
 

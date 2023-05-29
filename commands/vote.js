@@ -4,7 +4,7 @@ const Discord = require('discord.js'),
 
 module.exports.config = {
     name: "vote", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the link for voting on Minecraft server list", //Description of command - you can change it :)
+    description: "Hlasovací odkaz pro hlasování", //Description of command - you can change it :)
     aliases: commands.vote.aliases //Command's aliases - set them in config.js
 };
 

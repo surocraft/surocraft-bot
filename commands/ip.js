@@ -4,7 +4,7 @@ const Discord = require('discord.js'),
 
 module.exports.config = {
     name: "ip", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the IP address of server", //Description of command - you can change it :)
+    description: "IP adresa Minecraft serveru", //Description of command - you can change it :)
     aliases: commands.ip.aliases //Command's aliases - set them in config.js
 };
 

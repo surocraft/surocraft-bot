@@ -2,7 +2,10 @@ node_modules/
 package-lock.json
 .vscode/settings.json
 
+test/
+dev-config.js
+dev-data.json
+
 .env
 data.json
-
 commands/admin.js

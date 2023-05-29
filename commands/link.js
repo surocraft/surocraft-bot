@@ -4,8 +4,8 @@ const Discord = require('discord.js'),
 
 module.exports.config = {
     name: "links", //Name of command - RENAME THE FILE TOO!!!
-    description: "Pošle užitečné odkazy", //Description of command - you can change it :)
-    aliases: ["odkazy", "odkaz", "linktree", "link"], //Command's aliases - set them in config.js
+    description: "Užitečné odkazy", //Description of command - you can change it :)
+    aliases: ["odkazy", "odkaz", "linktree", "links"], //Command's aliases - set them in config.js
     enable: true //Enable this command? - true or false (boolean)
 };
 

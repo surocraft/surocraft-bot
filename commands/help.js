@@ -4,7 +4,7 @@ const { EmbedBuilder } = require('discord.js'),
 
 module.exports.config = {
     name: "help", //Name of command - RENAME THE FILE TOO!!!
-    description: "Sends the command list menu", //Description of command - you can change it :)
+    description: "Seznam příkazů", //Description of command - you can change it :)
     aliases: commands.help.aliases //Command's aliases - set them in config.js
 };
 

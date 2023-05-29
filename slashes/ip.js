@@ -6,13 +6,13 @@ const { SlashCommandBuilder } = require('@discordjs/builders'),
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ip') //Name of command - RENAME THE FILE TOO!!!
-        .setDescription(`Sends the IP address of server`) //Description of command - you can change it :)
+        .setDescription(`IP adresa Minecraft serveru`) //Description of command - you can change it :)
 };
 
 module.exports.run = async (bot, interaction) => {
     let { server, config } = bot,
         text = commands.ip.text,
-        icon = server.icon ? server.icon : message.guild.iconURL();
+        icon = server.icon ? server.icon : interaction.guild.iconURL();
 
     if (text.title === "" || text.description === "") {
         const ipEmbed = new Discord.EmbedBuilder()

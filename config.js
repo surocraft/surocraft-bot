@@ -17,7 +17,7 @@ module.exports = {
         name: "SuroCraft", //Your server name
         type: "java", //"java" or "bedrock"
         ip: "mc.surocraft.eu", //IP of your server - do not include port - e.g. "mc.hypixel.net"
-        port: "25565", //PORT of your server - empty => default port (JA 25565, BE 19132)
+        port: "25565", //PORT of your server - if not entered, default port is selected (25565 / 19132)
         icon: "https://i.imgur.com/Bp1BC8k.png", //Link to icon - like "https://website.com/icon.png"
         version: "1.7.x - 1.19.x", //Minecraft version of sever
         vote: "https://minecraftpocket-servers.com/server/113005/vote" //Vote link - like "https://minecraftpocket-servers.com/server/80103/vote/"
@@ -26,15 +26,19 @@ module.exports = {
     //Basic code settings
     //All settings are boolean wanted - Use "true" for enabling, and "false" for disabling setting.
     settings: {
+        //General:
         warns: true, //Show warns?
         debug: false, //Log most of the changes and updates (pretty spam)?
         inviteLink: false, //Show bot invite link on bot start?
-        readyScan: true, //On bot's start, send to console server's basic info?
-        split: true, //Advanced - Extract only the version like "1.17" or "1.12" etc.
+        readyScan: true, //On bot's start, send to console server's essential information?
+        //Features:
         randomColor: false, //Enable random hex color generator for embeds? Overwrites embeds settings!
         statusCH: true, //Enable auto-changing status message?
         votingCH: false, //Enable voting channel?
-        countingCH: false //Enable counting channel?
+        countingCH: false, //Enable counting channel?
+        //Advanced:
+        removeServerType: true, //Remove "Spigot", "Purpur" etc. from version and leave only "1.18", "1.19" etc.?
+        showDefaultPort: false //Show the server port behind IP if its default (25565, 19132) (primarily statusCH feature)?
     },
 
     //Period of auto changing status if you are using {onlinePlayers} or {maxPlayers} in bot's presence
@@ -62,7 +66,8 @@ module.exports = {
         reactions: {
             first: "👍", //First added reaction (the positive one)
             second: "👎", //Second added reaction (the negative one)
-            cancel: "❌" //Third added reaction (cancel/remove button)
+            cancel: "❌", //Third added reaction (cancel/remove button)
+            deleteOther: true //Delete all other reactions than those mentioned above (admin's reactions are ignored)
         }
     },
 
@@ -88,6 +93,7 @@ module.exports = {
             success: "💚",
             info: "💙",
             warn: "💛",
+            debug: "💜",
             error: "🛑"
         }
     },
@@ -173,7 +179,7 @@ module.exports = {
             ],
             text: { //Custom text settings (for translating or customization)
                 title: "{serverName} verze:",
-                description: "> **Java:** `1.7.x` - `1.19.x` (`1.17`+ doporučeno)\n> **Bedrock:** `1.19.x`"
+                description: "> **JAVA:** `1.7` a novější (`1.17+` doporučeno)\n> **BEDROCK:** `1.19.40` a novější\n\nVíce na [surocraft.eu/#join](https://surocraft.eu/#join)"
             }
         },
         vote: {
