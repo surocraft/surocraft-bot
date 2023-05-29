@@ -13,8 +13,8 @@ module.exports = async (bot) => {
     checkBannedPlayers();
 
     async function checkBannedPlayers() {
-        dataJSON.bannedPlayers.forEach(async function (ban) {
-            if (!!ban.expires && ban.expires < new Date()) {
+        await dataJSON.bannedPlayers.forEach(async function (ban) {
+            if (ban.expires !== 0 && ban.expires < new Date()) {
                 const banChannel = bot.channels.cache.get('890958568935788575');
                 const banMsg = await banChannel.messages.fetch(ban.msg);
 
@@ -81,6 +81,8 @@ module.exports = async (bot) => {
                 await fs.writeFile(bot.dev ? './dev-data.json' : './data.json', JSON.stringify(data, null, 4), err => {
                     if (err) console.log("Could not edit the data.json content! Error:\n" + err);
                 });
+
+                bot.channels.cache.get('862811186931433472').send({ content: `**Ban \`${ban.name}\` byl aktualizován!**\nOdkaz: <${banMsg.url}>` });
             }
         });
 

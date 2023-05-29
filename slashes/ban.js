@@ -28,8 +28,7 @@ module.exports = {
                     option.setName('hráč')
                         .setDescription('Zadej herní jméno hráče')
                         .setRequired(true)
-                        .setMinLength(3)
-                        .setMaxLength(16)
+                        .setMinLength(2)
                 )
                 .addStringOption(option =>
                     option.setName('doba')
@@ -70,8 +69,7 @@ module.exports = {
                     option.setName('hráč')
                         .setDescription('Zadej herní jméno hráče')
                         .setRequired(true)
-                        .setMinLength(3)
-                        .setMaxLength(16)
+                        .setMinLength(2)
                 )
                 .addStringOption(option =>
                     option.setName('doba')
@@ -122,8 +120,7 @@ module.exports = {
                     option.setName('hráč')
                         .setDescription('Zadej herní jméno hráče')
                         .setRequired(true)
-                        .setMinLength(3)
-                        .setMaxLength(16)
+                        .setMinLength(2)
                 )
                 .addUserOption(option =>
                     option.setName('staff')
@@ -150,6 +147,7 @@ module.exports.run = async (bot, interaction) => {
     player = interaction.options.getString('hráč');
     typ = parseInt(interaction.options.getString('typ'));
     let novyTyp = undefined;
+    let novyTypArr = new Array();
     if (interaction.options._subcommand === "update") novyTyp = parseInt(interaction.options.getString('novytyp'));
     let typArr = new Array();
     if (typ === 0 || novyTyp === 0) {
