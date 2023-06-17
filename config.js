@@ -35,6 +35,7 @@ module.exports = {
         randomColor: false, //Enable random hex color generator for embeds? Overwrites embeds settings!
         statusCH: true, //Enable auto-changing status message?
         votingCH: false, //Enable voting channel?
+        imagesCH: true, //Enable images channel?
         countingCH: false, //Enable counting channel?
         //Advanced:
         removeServerType: true, //Remove "Spigot", "Purpur" etc. from version and leave only "1.18", "1.19" etc.?
@@ -57,6 +58,7 @@ module.exports = {
     votingCH: {
         channelID: "",
         time: "30s", //Time for how long the cancel reaction should be deleted.
+        commands: false, //Enable commands (commands of this bot) usage?
         threads: {
             enable: false, //Create discussion threads for each votingCH message
             nameSyntax: "Návrh {ID}", //Thread name ("{ID}" = ID of voting/suggestion)
@@ -67,6 +69,24 @@ module.exports = {
             first: "👍", //First added reaction (the positive one)
             second: "👎", //Second added reaction (the negative one)
             cancel: "❌", //Third added reaction (cancel/remove button)
+            deleteOther: true //Delete all other reactions than those mentioned above (admin's reactions are ignored)
+        }
+    },
+
+    //Images channel - https://mb.petyxbron.cz/config/config-info#images-ch
+    imagesCH: {
+        channelID: "1119655320856305726",
+        commands: false, //Enable commands (commands of this bot) usage?
+        allowWithTextOnly: false, //Should be text messages without any attachments allowed? These messages won't get threads
+        allowWithTextAndImage: true, //Should be text messages allowed? If false, only messages with only attachments will be allowed
+        threads: {
+            enable: false, //Create discussion threads for each imagesCH message
+            nameSyntax: "Img {ID}", //Thread name ("{ID}" = ID of post/image)
+            idSyntax: "001", //ID syntax - choose how many zeros should IDs show (DON'T REMOVE INTEGER "1")
+            archiveTime: 1440 //Minutes after which the thread should archive in case of no recent activity
+        },
+        reactions: {
+            list: ["❤️"], //Which reactions should be added to the message?
             deleteOther: true //Delete all other reactions than those mentioned above (admin's reactions are ignored)
         }
     },
