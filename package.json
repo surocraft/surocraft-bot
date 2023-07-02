@@ -1,7 +1,7 @@
 {
   "name": "surocraft-bot",
-  "version": "2.5.2",
-  "forkedVersion": "1.7.0.5",
+  "version": "2.5.3",
+  "forkedVersion": "1.7.0.7",
   "description": "Discord Minecraft bot for SuroCraft",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "@discordjs/rest": "^1.7.1",
     "axios": "^1.4.0",
     "chalk": "4.1.2",
-    "discord-api-types": "^0.37.45",
+    "discord-api-types": "^0.37.47",
     "discord-timestamp": "^1.0.2",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",

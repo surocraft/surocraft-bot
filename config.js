@@ -1,4 +1,4 @@
-//CONFIG DATA EXPLANATION - https://mb.petyxbron.cz/config/config-info
+//CONFIG DATA EXPLANATION - https://mb.petyxbron.cz/installation/config
 //ENABLE BOT "SERVER MEMBERS INTENT" & "MESSAGE CONTENT INTENT" ON DISCORD DEVELOPER PORTAL
 //YOU CAN DISABLE COMMANDS BY MESSAGE CONTENT ON LINE 97 (IF YOU WON'T USE "MESSAGE CONTENT INTENT")
 module.exports = {
@@ -54,7 +54,7 @@ module.exports = {
         time: "10s" //Period of updating status message - like "3min", "20s" or "1min" etc.
     },
 
-    //Voting channel - https://mb.petyxbron.cz/config/config-info#voting-ch
+    //Voting channel
     votingCH: {
         channelID: "",
         time: "30s", //Time for how long the cancel reaction should be deleted.
@@ -73,7 +73,7 @@ module.exports = {
         }
     },
 
-    //Images channel - https://mb.petyxbron.cz/config/config-info#images-ch
+    //Images channel
     imagesCH: {
         channelID: "1119655320856305726",
         commands: false, //Enable commands (commands of this bot) usage?
@@ -86,7 +86,7 @@ module.exports = {
             archiveTime: 1440 //Minutes after which the thread should archive in case of no recent activity
         },
         reactions: {
-            list: ["❤️"], //Which reactions should be added to the message?
+            list: ["❤️", "😂", "😢"], //Which reactions should be added to the message?
             deleteOther: true //Delete all other reactions than those mentioned above (admin's reactions are ignored)
         }
     },
@@ -216,4 +216,4 @@ module.exports = {
     }
 };
 
-//CONFIG DATA EXPLANATION - https://mb.petyxbron.cz/config/config-info
+//CONFIG DATA EXPLANATION - https://mb.petyxbron.cz/installation/config
