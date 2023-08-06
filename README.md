@@ -1,7 +1,7 @@
 This repository is forked from [minecraft-bot](https://github.com/PetyXbron/minecraft-bot) project and it's used for Minecraft server called SuroCraft.
 The content of most strings is in the Czech language.
 
-[minecraft-bot](https://github.com/PetyXbron/minecraft-bot) version using now (forked): [**`1.7.0.7`**](https://github.com/PetyXbron/minecraft-bot/commit/b7cd5fe25d26b2c927a52a318887e3f1d8e6a49e)
+[minecraft-bot](https://github.com/PetyXbron/minecraft-bot) version using now (forked): [**`1.7.3.3`**](https://github.com/PetyXbron/minecraft-bot/commit/b7cd5fe25d26b2c927a52a318887e3f1d8e6a49e)
 (latest [![Latest master version](https://img.shields.io/github/package-json/version/PetyXbron/minecraft-bot?color=24B712&label=Master&labelColor=232121&logo=github&sort=semver&style=flat)](https://github.com/PetyXbron/minecraft-bot/tree/main/))
 (latest [![Latest dev version](https://img.shields.io/github/package-json/version/PetyXbron/minecraft-bot/dev?color=24B712&label=Dev&labelColor=232121&logo=github&sort=semver&style=flat)](https://github.com/PetyXbron/minecraft-bot/tree/dev/))
 
